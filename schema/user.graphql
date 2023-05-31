@@ -1,0 +1,52 @@
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    role: String!
+    customer: Customer @goField(forceResolver: true)
+}
+
+input UserInput {
+    username: String!
+    password: String!
+    email: String!
+    role: String!
+    customer: CustomerInput
+}
+
+input UserUpdateInput {
+    id: ID!
+    email: String
+    role: String
+}
+
+input PasswordUpdateInput {
+    id: ID!
+    previous_password: String!
+    new_password: String!
+}
+
+input LoginInput {
+    username: String!
+    password: String!
+}
+
+type LoginInfo {
+    tokenString: String!
+}
+
+type UserOps {
+    register(input: UserInput!): User!  @goField(forceResolver: true)
+    updateUser(input: UserUpdateInput!): Boolean! @hasRoles(roles: [admin])  @goField(forceResolver: true)
+    updatePassword(input: PasswordUpdateInput!): Boolean! @hasRoles(roles: [user, admin])  @goField(forceResolver: true)
+}
+
+extend type Mutation {
+    user: UserOps!
+}
+
+extend type Query {
+    users(input: Pagination): [User!]! @hasRoles(roles: [admin])
+    login(input: LoginInput!): LoginInfo!
+    logout: Boolean!
+}

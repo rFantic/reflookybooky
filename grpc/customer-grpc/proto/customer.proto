@@ -1,0 +1,42 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "internal/proto/common.proto";
+package pb;
+option go_package = "./;pb";
+
+message Customer {
+    string id = 1;
+    string name = 2;
+    string address = 3;
+    string license_id = 4;
+    string phone_number = 5;
+    string email = 6;
+}
+
+message CustomerInput {
+    string name = 2;
+    string address = 3;
+    string license_id = 4;
+    string phone_number = 5;
+    string email = 6;
+}
+
+message Customers {
+    repeated Customer customers = 1;
+}
+
+message CustomerUpdateInput {
+    string id = 1;
+    optional string name = 2;
+    optional string address = 3;
+    optional string license_id = 4;
+    optional string phone_number = 5;
+    optional string email = 6;
+}
+
+service CustomerService {
+    rpc PostCustomer (CustomerInput) returns (Customer) {}
+    rpc GetCustomer (UUID) returns (Customer) {}
+    rpc GetCustomers (Pagination) returns (Customers) {}
+    rpc UpdateCustomer (CustomerUpdateInput) returns (google.protobuf.Empty) {}
+}

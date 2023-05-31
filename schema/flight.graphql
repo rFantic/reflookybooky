@@ -1,0 +1,68 @@
+enum FlightStatus{
+    Cancelled
+    Departed
+    Landed
+    Scheduled
+    Delayed
+}
+
+type Flight {
+    id: String!
+    name: String!
+    origin: Airport!  @goField(forceResolver: true)
+    destination: Airport!  @goField(forceResolver: true)
+    total_slots: Int!
+    available_slots: Int!
+    departure_time: String!
+    arrival_time: String!
+    status: String!
+}
+
+input FlightInput{
+    name: String!
+    originId: String!
+    destinationId: String!
+    total_slots: Int!
+    departure_time: String!
+    arrival_time: String!
+    status: FlightStatus!
+}
+
+input FlightUpdateInput{
+    id: String!
+    name: String
+    originId: String
+    destinationId: String
+    total_slots: Int
+    departure_time: String
+    arrival_time: String
+    status: FlightStatus
+}
+
+input FlightCancelInput {
+    id: String!
+}
+
+input FlightSearchInput {
+    available_slots_at_least: Int
+    origin_id: String
+    destination_id: String
+    departure_time_before: String
+    departure_time_after: String
+    status: FlightStatus
+}
+
+type FlightOps {
+    createFlight(input: FlightInput!): Flight! @hasRoles(roles: [admin])  @goField(forceResolver: true)
+    updateFlight(input: FlightUpdateInput!): Boolean! @hasRoles(roles: [admin])  @goField(forceResolver: true)
+    cancelFlight(input: FlightCancelInput): Boolean! @hasRoles(roles: [admin]) @goField(forceResolver: true)
+}
+
+extend type Query {
+    flight(input: Pagination): [Flight!]!
+    searchFlight(input: FlightSearchInput): [Flight]!
+}
+
+extend type Mutation {
+    flight: FlightOps!
+}

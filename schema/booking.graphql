@@ -1,0 +1,48 @@
+enum BookingStatus {
+    Cancelled
+    Scheduled
+    Departed
+}
+
+type Booking {
+    id: String!
+    going_flight: Flight!  @goField(forceResolver: true)
+    return_flight: Flight!  @goField(forceResolver: true)
+    customer: Customer!  @goField(forceResolver: true)
+    status: BookingStatus!
+    ticket: [Ticket]!  @goField(forceResolver: true)
+}
+
+input BookingInput{
+    customerId: String!
+    going_flight_id: String!
+    return_flight_id: String
+    ticket: [TicketInput]!
+    status: BookingStatus!
+}
+
+input BookingInputForGuest{
+    customer: CustomerInput!
+    going_flight_id: String!
+    return_flight_id: String
+    ticket: [TicketInput]!
+    status: BookingStatus!
+}
+
+input BookingCancelInput {
+    id: String!
+}
+
+type BookingOps {
+    createBookingForGuest(input: BookingInputForGuest!): Booking!  @goField(forceResolver: true)
+    createBooking(input: BookingInput!): Booking! @hasRoles(roles: [user])  @goField(forceResolver: true)
+    cancelBooking(input: BookingCancelInput): Boolean!  @goField(forceResolver: true)
+}
+
+extend type Query {
+    booking(input: Pagination): [Booking!]! @hasRoles(roles: [admin])
+}
+
+extend type Mutation {
+    booking: BookingOps!
+}

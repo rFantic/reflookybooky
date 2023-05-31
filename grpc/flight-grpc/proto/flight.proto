@@ -1,0 +1,80 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "internal/proto/common.proto";
+package pb;
+option go_package = "./;pb";
+
+message Airport {
+    string id = 1;
+    string name = 2;
+    string address = 3;
+}
+
+message Airports {
+    repeated Airport airports = 1;
+}
+
+message Flight {
+    string id = 1;
+    string name = 2;
+    Airport origin = 3;
+    Airport destination = 4;
+    int64 total_slots = 5;
+    int64 available_slots = 6;
+    google.protobuf.Timestamp departure_time = 7;
+    google.protobuf.Timestamp arrival_time = 8;
+    string status = 9;
+}
+
+message FlightUpdateInput {
+    string id = 1;
+    optional string name = 2;
+    optional string origin_id = 3;
+    optional string destination_id = 4;
+    optional int64 total_slots = 5;
+    optional google.protobuf.Timestamp departure_time = 6;
+    optional google.protobuf.Timestamp arrival_time = 7;
+    optional string status = 8;
+}
+
+message FlightInput {
+    string name = 1;
+    string origin_id = 2;
+    string destination_id = 3;
+    optional int64 total_slots = 4;
+    google.protobuf.Timestamp departure_time = 5;
+    google.protobuf.Timestamp arrival_time = 6;
+    string status = 7;
+}
+
+message Flights {
+    repeated Flight flights = 1;
+}
+
+message AvailableSlotsInput{
+    string id = 1;
+    int64 available_slots = 2;
+}
+
+message FlightSearchInput {
+    optional int64 available_slots_at_least = 1;
+    optional string origin_id = 2;
+    optional string destination_id = 3;
+    optional google.protobuf.Timestamp departure_time_before = 4;
+    optional google.protobuf.Timestamp departure_time_after = 5;
+    optional string status = 6;
+}
+
+service FlightService {
+    rpc PostAirport (Airport) returns (Airport) {}
+    rpc GetAirport (UUID) returns (Airport) {}
+    rpc GetAirports (Pagination) returns (Airports) {}
+    rpc PostFlight (FlightInput) returns (Flight) {}
+    rpc GetFlight (UUID) returns (Flight) {}
+    rpc GetFlights (Pagination) returns (Flights) {}
+    rpc UpdateFlight (FlightUpdateInput) returns (google.protobuf.Empty) {}
+    rpc SetAvailableSlots (AvailableSlotsInput) returns (google.protobuf.Empty) {}
+    rpc SearchFlight (FlightSearchInput) returns (Flights) {}
+    rpc CancelFlight (UUID) returns (google.protobuf.Empty) {}
+}

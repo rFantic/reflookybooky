@@ -1,0 +1,57 @@
+syntax = "proto3";
+import "proto/customer.proto";
+import "proto/common.proto";
+import "google/protobuf/empty.proto";
+package pb;
+option go_package = "./;pb";
+
+message User {
+    string id = 1;
+    string username = 2;
+    string password = 3;
+    string email = 4;
+    string role = 5;
+    Customer customer = 6;
+}
+
+message UserInput {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+    string role = 4;
+    optional string customerId = 5;
+}
+
+message PasswordUpdateInput {
+    string id = 1;
+    string previous_password = 2;
+    string new_password = 3;
+}
+
+message UserUpdateInput {
+    string id = 1;
+    optional string email = 2;
+    optional string role = 3;
+}
+
+message Users {
+    repeated User users = 1;
+}
+
+message LoginRequest {
+    User user = 1;
+}
+
+message LoginResponse{
+    string jwtToken = 1;
+    int64 expireTime = 2;
+}
+
+service UserService {
+    rpc UpdatePassword(PasswordUpdateInput) returns (google.protobuf.Empty) {}
+    rpc UpdateUser(UserUpdateInput) returns (google.protobuf.Empty) {}
+    rpc PostUser (UserInput) returns (User) {}
+    rpc GetUser (UUID) returns (User) {}
+    rpc GetUsers (Pagination) returns (Users) {}
+    rpc Login (LoginRequest) returns (LoginResponse) {}
+}

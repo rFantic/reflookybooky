@@ -1,0 +1,14 @@
+syntax = "proto3";
+package pb;
+option go_package = "./;pb";
+
+message UUID {
+    string id = 1;
+}
+
+message Pagination {
+    repeated string ascFields = 1;
+    repeated string desFields = 2;
+    optional int32 limit = 3;
+    optional int32 offset = 4;
+}

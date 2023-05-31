@@ -1,0 +1,22 @@
+type Airport {
+    id: String!
+    name: String!
+    address: String!
+}
+
+input AirportInput{
+    name: String!
+    address: String!
+}
+
+type AirportOps {
+    createAirport(input: AirportInput!): Airport! @hasRoles(roles: [admin]) @goField(forceResolver: true)
+}
+
+extend type Query {
+    airport(input: Pagination): [Airport!]! @hasRoles(roles: [user, admin])
+}
+
+extend type Mutation {
+    airport: AirportOps!
+}

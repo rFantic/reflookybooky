@@ -1,0 +1,17 @@
+directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITION  | FIELD_DEFINITION
+directive @hasRoles(roles: [Role]!) on FIELD_DEFINITION
+
+enum Role {
+    admin
+    user
+}
+
+type Mutation
+type Query 
+
+input Pagination {
+    ascFields: [String]
+    desFields: [String]
+    limit: Int
+    offset: Int
+}

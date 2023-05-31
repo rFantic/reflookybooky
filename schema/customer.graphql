@@ -1,0 +1,38 @@
+type Customer {
+    id: ID!
+    name: String!
+    address: String!
+    license_id: String!
+    phone_number: String!
+    email: String!
+}
+
+input CustomerInput {
+    name: String!
+    address: String!
+    license_id: String!
+    phone_number: String!
+    email: String!
+}
+
+input CustomerUpdateInput {
+    id: ID!
+    name: String
+    address: String
+    license_id: String
+    phone_number: String
+    email: String
+}
+
+type CustomerOps {
+    createCustomer(input: CustomerInput!): Customer! @hasRoles(roles: [admin]) @goField(forceResolver: true)
+    updateCustomer(input: CustomerUpdateInput!): Boolean! @hasRoles(roles: [user, admin]) @goField(forceResolver: true)
+}
+
+extend type Mutation {
+    customer: CustomerOps!
+}
+
+extend type Query {
+    customers (input: Pagination): [Customer!]! @hasRoles(roles: [admin])
+}
