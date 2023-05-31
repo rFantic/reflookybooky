@@ -21,9 +21,10 @@ services:
       - userdb
     build:
       context: .
-      dockerfile: ./grpc/user-grpc/user.dockerfile
+      dockerfile: ./services/user/user.dockerfile
     restart: on-failure
-    command: ["app"]
+    ports:
+      - 4001:4000
 
   flightdb:
     profiles: ["flight", "graphql"]
@@ -40,9 +41,10 @@ services:
       - flightdb
     build:
       context: .
-      dockerfile: ./grpc/flight-grpc/flight.dockerfile
+      dockerfile: ./services/flight/flight.dockerfile
     restart: on-failure
-    command: ["app"]
+    ports:
+      - 4003:4000
 
   customerdb:
     profiles: ["customer", "graphql"]
@@ -59,9 +61,10 @@ services:
       - customerdb
     build:
       context: .
-      dockerfile: ./grpc/customer-grpc/customer.dockerfile
+      dockerfile: ./services/customer/customer.dockerfile
     restart: on-failure
-    command: ["app"]
+    ports:
+      - 4002:4000
 
   bookingdb:
     profiles: ["booking", "graphql"]
@@ -78,16 +81,17 @@ services:
       - bookingdb
     build:
       context: .
-      dockerfile: ./grpc/booking-grpc/booking.dockerfile
+      dockerfile: ./services/booking/booking.dockerfile
     restart: on-failure
-    command: ["app"]
+    ports:
+      - 4004:4000
 
   graphql:
     profiles: ["graphql"]
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./services/graphql/graphql.dockerfile
     restart: on-failure
-    command: ["app"]
     ports:
       - 8081:8081
+      - 4000:4000

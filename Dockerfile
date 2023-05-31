@@ -1,41 +1,15 @@
-FROM golang:1.19.0-alpine3.16 AS build
-
-ARG COMMIT
-
-ENV GOPROXY "https://goproxy.io,direct"
-
-RUN apk update && \
-    apk add --no-cache tzdata ca-certificates make gettext bash
-
-WORKDIR /app
-
-COPY go.mod .
-COPY go.sum .
-
-RUN go mod tidy
-
-COPY . .
-
-RUN make build COMMIT=${COMMIT}
-
-FROM alpine:3.16
-
-RUN apk update && \
-    apk add --no-cache tzdata ca-certificates gettext openssl bash
-
-RUN addgroup -S app && adduser -S -g app app
-
-WORKDIR /app
-
-COPY --from=build /app/config.yaml .
-COPY --from=build /app/server .
-
-RUN chmod +x /app/server
-
-RUN chown -R app /app
-
-USER app
-
-EXPOSE 8000
-
-ENTRYPOINT [ "./server" ]
+# syntax = docker/dockerfile:1-experimental
+FROM --platform=${BUILDPLATFORM} golang
+WORKDIR /go/src/graphql
+RUN go install github.com/go-delve/delve/cmd/dlv@v1.20.0
+COPY go.mod go.sum ./
+RUN go mod download
+COPY services/graphql services/graphql
+COPY services/graphql/.env .env
+COPY internal internal
+COPY middleware middleware
+COPY pb pb
+RUN --mount=type=cache,target=/root/.cache/go-build \
+go build -gcflags="all=-N -l" -o /go/bin/app services/graphql/cmd/main.go
+# CMD ["app"]
+CMD [ "/go/bin/dlv", "--listen=:4000", "--headless=true", "--log=true", "--accept-multiclient", "--api-version=2", "exec", "/go/bin/app" ]

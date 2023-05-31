@@ -15,18 +15,5 @@ genProtoc:
 	--go-grpc_opt=paths=import \
 	./proto/*.proto
 
-build:
-	GO111MODULE=on CGO_ENABLED=0 GOOS=$(OSFLAG) GOARCH=$(GOARCH) go build -ldflags "-X main.VERSION=$(VERSION) -X main.COMMIT=$(COMMIT) -X main.DATE=$(DATE) -w -s" -v -o server cmd/main.go
-
-api: build
-	./server api
-
-db:
-	docker compose up -d db
-
-run:
-	docker compose up -d
-
-teardown:
-	docker compose down -v --remove-orphans
-	docker compose rm --force --stop -v
+upProfile:
+	docker compose --profile $(Profile) up -d --build --remove-orphans
