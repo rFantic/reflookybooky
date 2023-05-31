@@ -4,10 +4,7 @@ RUN go install github.com/go-delve/delve/cmd/dlv@v1.20.0
 WORKDIR /go/src/user
 COPY go.mod go.sum ./
 RUN go mod download
-COPY ./grpc/user-grpc ./grpc/user-grpc
-COPY ./grpc/user-grpc/.env .env
-COPY internal internal
-COPY pb pb
+COPY . .
 RUN --mount=type=cache,target=/root/.cache/go-build \
 go build -gcflags="all=-N -l" -o /go/bin/app grpc/user-grpc/cmd/main.go
 # CMD ["app"]
