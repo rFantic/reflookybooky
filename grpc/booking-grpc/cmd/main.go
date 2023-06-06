@@ -18,8 +18,9 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile(".env")
+	viper.SetConfigFile("./config/.env")
 	viper.ReadInConfig()
+	viper.AutomaticEnv()
 }
 
 func main() {
