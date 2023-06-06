@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"flookybooky/internal/util"
 	"net/mail"
 
 	"entgo.io/ent"
@@ -11,6 +12,12 @@ import (
 // User holds the schema definition for the User entity.
 type User struct {
 	ent.Schema
+}
+
+func (User) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		util.TimeMixin{},
+	}
 }
 
 // Fields of the User.

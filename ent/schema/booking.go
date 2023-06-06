@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"time"
+	"flookybooky/internal/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
@@ -14,6 +14,12 @@ type Booking struct {
 	ent.Schema
 }
 
+func (Booking) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		util.TimeMixin{},
+	}
+}
+
 // Fields of the Booking.
 func (Booking) Fields() []ent.Field {
 	return []ent.Field{
@@ -22,7 +28,6 @@ func (Booking) Fields() []ent.Field {
 		field.UUID("going_flight_id", uuid.UUID{}),
 		field.UUID("return_flight_id", uuid.UUID{}).Optional(),
 		field.Enum("status").Values("Cancelled", "Scheduled", "Departed"),
-		field.Time("created_at").Immutable().Default(time.Now),
 	}
 }
 

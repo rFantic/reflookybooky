@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"flookybooky/internal/util"
+
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -10,6 +12,12 @@ import (
 // Airport holds the schema definition for the Airport entity.
 type Airport struct {
 	ent.Schema
+}
+
+func (Airport) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		util.TimeMixin{},
+	}
 }
 
 // Fields of the Airport.

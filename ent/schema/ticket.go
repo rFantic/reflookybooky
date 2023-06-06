@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"flookybooky/internal/util"
+
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -10,6 +12,12 @@ import (
 // Ticket holds the schema definition for the Ticket entity.
 type Ticket struct {
 	ent.Schema
+}
+
+func (Ticket) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		util.TimeMixin{},
+	}
 }
 
 // Fields of the Ticket.

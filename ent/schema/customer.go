@@ -2,8 +2,8 @@ package schema
 
 import (
 	"errors"
+	"flookybooky/internal/util"
 	"flookybooky/internal/validate"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
@@ -13,6 +13,12 @@ import (
 // Customer holds the schema definition for the Customer entity.
 type Customer struct {
 	ent.Schema
+}
+
+func (Customer) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		util.TimeMixin{},
+	}
 }
 
 // Fields of the Customer.
@@ -32,7 +38,6 @@ func (Customer) Fields() []ent.Field {
 		field.String("phone_number").
 			Validate(validate.IsNumeric),
 		field.String("email"),
-		field.Time("timestamp").Immutable().Default(time.Now()),
 	}
 }
 

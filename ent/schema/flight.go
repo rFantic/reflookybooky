@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"time"
+	"flookybooky/internal/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
@@ -12,6 +12,12 @@ import (
 // Flight holds the schema definition for the Flight entity.
 type Flight struct {
 	ent.Schema
+}
+
+func (Flight) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		util.TimeMixin{},
+	}
 }
 
 // Fields of the Flight.
@@ -26,7 +32,6 @@ func (Flight) Fields() []ent.Field {
 		field.Int("total_slots"),
 		field.Int("available_slots"),
 		field.Enum("status").Values("Cancelled", "Departed", "Landed", "Scheduled", "Delayed"),
-		field.Time("created_at").Immutable().Default(time.Now),
 	}
 }
 

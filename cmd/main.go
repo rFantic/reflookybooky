@@ -31,7 +31,6 @@ func main() {
 	r.HandleMethodNotAllowed = true
 	r.Use(
 		middleware.CorsMiddleware(),
-		// middleware.RequestCtxMiddleware(),
 		middleware.CookieMiddleware(),
 	)
 
