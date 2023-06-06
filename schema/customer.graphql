@@ -5,6 +5,8 @@ type Customer {
     license_id: String!
     phone_number: String!
     email: String!
+    created_at: String!
+    updated_at: String!
 }
 
 input CustomerInput {

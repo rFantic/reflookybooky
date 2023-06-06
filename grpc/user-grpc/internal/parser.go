@@ -17,6 +17,8 @@ func ParseUserEntToPb(in *ent.User) (out *pb.User) {
 				Id: *in.CustomerID,
 			}
 		}
+		out.CreatedAt = in.CreatedAt.String()
+		out.UpdatedAt = in.CreatedAt.String()
 	}
 	return out
 }

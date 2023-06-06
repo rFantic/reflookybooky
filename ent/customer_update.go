@@ -8,6 +8,7 @@ import (
 	"flookybooky/ent/customer"
 	"flookybooky/ent/predicate"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -24,6 +25,12 @@ type CustomerUpdate struct {
 // Where appends a list predicates to the CustomerUpdate builder.
 func (cu *CustomerUpdate) Where(ps ...predicate.Customer) *CustomerUpdate {
 	cu.mutation.Where(ps...)
+	return cu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cu *CustomerUpdate) SetUpdatedAt(t time.Time) *CustomerUpdate {
+	cu.mutation.SetUpdatedAt(t)
 	return cu
 }
 
@@ -64,6 +71,7 @@ func (cu *CustomerUpdate) Mutation() *CustomerMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *CustomerUpdate) Save(ctx context.Context) (int, error) {
+	cu.defaults()
 	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
 }
 
@@ -86,6 +94,14 @@ func (cu *CustomerUpdate) Exec(ctx context.Context) error {
 func (cu *CustomerUpdate) ExecX(ctx context.Context) {
 	if err := cu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (cu *CustomerUpdate) defaults() {
+	if _, ok := cu.mutation.UpdatedAt(); !ok {
+		v := customer.UpdateDefaultUpdatedAt()
+		cu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -115,6 +131,9 @@ func (cu *CustomerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := cu.mutation.UpdatedAt(); ok {
+		_spec.SetField(customer.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := cu.mutation.Name(); ok {
 		_spec.SetField(customer.FieldName, field.TypeString, value)
@@ -149,6 +168,12 @@ type CustomerUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *CustomerMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cuo *CustomerUpdateOne) SetUpdatedAt(t time.Time) *CustomerUpdateOne {
+	cuo.mutation.SetUpdatedAt(t)
+	return cuo
 }
 
 // SetName sets the "name" field.
@@ -201,6 +226,7 @@ func (cuo *CustomerUpdateOne) Select(field string, fields ...string) *CustomerUp
 
 // Save executes the query and returns the updated Customer entity.
 func (cuo *CustomerUpdateOne) Save(ctx context.Context) (*Customer, error) {
+	cuo.defaults()
 	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
 }
 
@@ -223,6 +249,14 @@ func (cuo *CustomerUpdateOne) Exec(ctx context.Context) error {
 func (cuo *CustomerUpdateOne) ExecX(ctx context.Context) {
 	if err := cuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (cuo *CustomerUpdateOne) defaults() {
+	if _, ok := cuo.mutation.UpdatedAt(); !ok {
+		v := customer.UpdateDefaultUpdatedAt()
+		cuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -269,6 +303,9 @@ func (cuo *CustomerUpdateOne) sqlSave(ctx context.Context) (_node *Customer, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := cuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(customer.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := cuo.mutation.Name(); ok {
 		_spec.SetField(customer.FieldName, field.TypeString, value)

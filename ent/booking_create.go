@@ -22,6 +22,34 @@ type BookingCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (bc *BookingCreate) SetCreatedAt(t time.Time) *BookingCreate {
+	bc.mutation.SetCreatedAt(t)
+	return bc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (bc *BookingCreate) SetNillableCreatedAt(t *time.Time) *BookingCreate {
+	if t != nil {
+		bc.SetCreatedAt(*t)
+	}
+	return bc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bc *BookingCreate) SetUpdatedAt(t time.Time) *BookingCreate {
+	bc.mutation.SetUpdatedAt(t)
+	return bc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (bc *BookingCreate) SetNillableUpdatedAt(t *time.Time) *BookingCreate {
+	if t != nil {
+		bc.SetUpdatedAt(*t)
+	}
+	return bc
+}
+
 // SetCustomerID sets the "customer_id" field.
 func (bc *BookingCreate) SetCustomerID(u uuid.UUID) *BookingCreate {
 	bc.mutation.SetCustomerID(u)
@@ -51,20 +79,6 @@ func (bc *BookingCreate) SetNillableReturnFlightID(u *uuid.UUID) *BookingCreate 
 // SetStatus sets the "status" field.
 func (bc *BookingCreate) SetStatus(b booking.Status) *BookingCreate {
 	bc.mutation.SetStatus(b)
-	return bc
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (bc *BookingCreate) SetCreatedAt(t time.Time) *BookingCreate {
-	bc.mutation.SetCreatedAt(t)
-	return bc
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (bc *BookingCreate) SetNillableCreatedAt(t *time.Time) *BookingCreate {
-	if t != nil {
-		bc.SetCreatedAt(*t)
-	}
 	return bc
 }
 
@@ -136,6 +150,10 @@ func (bc *BookingCreate) defaults() {
 		v := booking.DefaultCreatedAt()
 		bc.mutation.SetCreatedAt(v)
 	}
+	if _, ok := bc.mutation.UpdatedAt(); !ok {
+		v := booking.DefaultUpdatedAt()
+		bc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := bc.mutation.ID(); !ok {
 		v := booking.DefaultID()
 		bc.mutation.SetID(v)
@@ -144,6 +162,12 @@ func (bc *BookingCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (bc *BookingCreate) check() error {
+	if _, ok := bc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Booking.created_at"`)}
+	}
+	if _, ok := bc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Booking.updated_at"`)}
+	}
 	if _, ok := bc.mutation.CustomerID(); !ok {
 		return &ValidationError{Name: "customer_id", err: errors.New(`ent: missing required field "Booking.customer_id"`)}
 	}
@@ -157,9 +181,6 @@ func (bc *BookingCreate) check() error {
 		if err := booking.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Booking.status": %w`, err)}
 		}
-	}
-	if _, ok := bc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Booking.created_at"`)}
 	}
 	return nil
 }
@@ -196,6 +217,14 @@ func (bc *BookingCreate) createSpec() (*Booking, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
+	if value, ok := bc.mutation.CreatedAt(); ok {
+		_spec.SetField(booking.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := bc.mutation.UpdatedAt(); ok {
+		_spec.SetField(booking.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := bc.mutation.CustomerID(); ok {
 		_spec.SetField(booking.FieldCustomerID, field.TypeUUID, value)
 		_node.CustomerID = value
@@ -211,10 +240,6 @@ func (bc *BookingCreate) createSpec() (*Booking, *sqlgraph.CreateSpec) {
 	if value, ok := bc.mutation.Status(); ok {
 		_spec.SetField(booking.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := bc.mutation.CreatedAt(); ok {
-		_spec.SetField(booking.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
 	}
 	if nodes := bc.mutation.TicketIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

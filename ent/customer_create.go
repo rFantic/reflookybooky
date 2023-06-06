@@ -21,6 +21,34 @@ type CustomerCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (cc *CustomerCreate) SetCreatedAt(t time.Time) *CustomerCreate {
+	cc.mutation.SetCreatedAt(t)
+	return cc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (cc *CustomerCreate) SetNillableCreatedAt(t *time.Time) *CustomerCreate {
+	if t != nil {
+		cc.SetCreatedAt(*t)
+	}
+	return cc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cc *CustomerCreate) SetUpdatedAt(t time.Time) *CustomerCreate {
+	cc.mutation.SetUpdatedAt(t)
+	return cc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (cc *CustomerCreate) SetNillableUpdatedAt(t *time.Time) *CustomerCreate {
+	if t != nil {
+		cc.SetUpdatedAt(*t)
+	}
+	return cc
+}
+
 // SetName sets the "name" field.
 func (cc *CustomerCreate) SetName(s string) *CustomerCreate {
 	cc.mutation.SetName(s)
@@ -48,20 +76,6 @@ func (cc *CustomerCreate) SetPhoneNumber(s string) *CustomerCreate {
 // SetEmail sets the "email" field.
 func (cc *CustomerCreate) SetEmail(s string) *CustomerCreate {
 	cc.mutation.SetEmail(s)
-	return cc
-}
-
-// SetTimestamp sets the "timestamp" field.
-func (cc *CustomerCreate) SetTimestamp(t time.Time) *CustomerCreate {
-	cc.mutation.SetTimestamp(t)
-	return cc
-}
-
-// SetNillableTimestamp sets the "timestamp" field if the given value is not nil.
-func (cc *CustomerCreate) SetNillableTimestamp(t *time.Time) *CustomerCreate {
-	if t != nil {
-		cc.SetTimestamp(*t)
-	}
 	return cc
 }
 
@@ -114,9 +128,13 @@ func (cc *CustomerCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cc *CustomerCreate) defaults() {
-	if _, ok := cc.mutation.Timestamp(); !ok {
-		v := customer.DefaultTimestamp
-		cc.mutation.SetTimestamp(v)
+	if _, ok := cc.mutation.CreatedAt(); !ok {
+		v := customer.DefaultCreatedAt()
+		cc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := cc.mutation.UpdatedAt(); !ok {
+		v := customer.DefaultUpdatedAt()
+		cc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := cc.mutation.ID(); !ok {
 		v := customer.DefaultID()
@@ -126,6 +144,12 @@ func (cc *CustomerCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *CustomerCreate) check() error {
+	if _, ok := cc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Customer.created_at"`)}
+	}
+	if _, ok := cc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Customer.updated_at"`)}
+	}
 	if _, ok := cc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Customer.name"`)}
 	}
@@ -150,9 +174,6 @@ func (cc *CustomerCreate) check() error {
 	}
 	if _, ok := cc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "Customer.email"`)}
-	}
-	if _, ok := cc.mutation.Timestamp(); !ok {
-		return &ValidationError{Name: "timestamp", err: errors.New(`ent: missing required field "Customer.timestamp"`)}
 	}
 	return nil
 }
@@ -189,6 +210,14 @@ func (cc *CustomerCreate) createSpec() (*Customer, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
+	if value, ok := cc.mutation.CreatedAt(); ok {
+		_spec.SetField(customer.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := cc.mutation.UpdatedAt(); ok {
+		_spec.SetField(customer.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := cc.mutation.Name(); ok {
 		_spec.SetField(customer.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -208,10 +237,6 @@ func (cc *CustomerCreate) createSpec() (*Customer, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Email(); ok {
 		_spec.SetField(customer.FieldEmail, field.TypeString, value)
 		_node.Email = value
-	}
-	if value, ok := cc.mutation.Timestamp(); ok {
-		_spec.SetField(customer.FieldTimestamp, field.TypeTime, value)
-		_node.Timestamp = value
 	}
 	return _node, _spec
 }

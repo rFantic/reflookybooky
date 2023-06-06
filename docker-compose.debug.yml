@@ -6,82 +6,54 @@ services:
     ports:
       - 9999:8080
 
-  userdb:
-    profiles: ["user", "graphql"]
+  db:
     image: postgres
     restart: always
     environment:
-      POSTGRES_DB: user
+      POSTGRES_DB: flookybooky
       POSTGRES_USER: root
       POSTGRES_PASSWORD: passwd
 
   user:
     profiles: ["user", "graphql"]
     depends_on:
-      - userdb
+      - db
     build:
       context: .
-      dockerfile: ./services/user/user.dockerfile
+      dockerfile: ./grpc/user-grpc/user.dockerfile
     restart: on-failure
     ports:
       - 4001:4000
 
-  flightdb:
-    profiles: ["flight", "graphql"]
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: flight
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: passwd
-
   flight:
     profiles: ["flight", "graphql"]
     depends_on:
-      - flightdb
+      - db
     build:
       context: .
-      dockerfile: ./services/flight/flight.dockerfile
+      dockerfile: ./grpc/flight-grpc/flight.dockerfile
     restart: on-failure
     ports:
       - 4003:4000
 
-  customerdb:
-    profiles: ["customer", "graphql"]
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: customer
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: passwd
-
   customer:
     profiles: ["customer", "graphql"]
     depends_on:
-      - customerdb
+      - db
     build:
       context: .
-      dockerfile: ./services/customer/customer.dockerfile
+      dockerfile: ./grpc/customer-grpc/customer.dockerfile
     restart: on-failure
     ports:
       - 4002:4000
 
-  bookingdb:
-    profiles: ["booking", "graphql"]
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: booking
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: passwd
-
   booking:
     profiles: ["booking", "graphql"]
     depends_on:
-      - bookingdb
+      - db
     build:
       context: .
-      dockerfile: ./services/booking/booking.dockerfile
+      dockerfile: ./grpc/booking-grpc/booking.dockerfile
     restart: on-failure
     ports:
       - 4004:4000
@@ -90,8 +62,8 @@ services:
     profiles: ["graphql"]
     build:
       context: .
-      dockerfile: ./services/graphql/graphql.dockerfile
+      dockerfile: ./Dockerfile
     restart: on-failure
     ports:
-      - 8081:8081
       - 4000:4000
+      - 8081:8081

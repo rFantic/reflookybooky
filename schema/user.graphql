@@ -4,6 +4,8 @@ type User {
     email: String!
     role: String!
     customer: Customer @goField(forceResolver: true)
+    created_at: String!
+    updated_at: String!
 }
 
 input UserInput {

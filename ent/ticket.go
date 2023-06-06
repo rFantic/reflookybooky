@@ -7,6 +7,7 @@ import (
 	"flookybooky/ent/ticket"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -18,6 +19,10 @@ type Ticket struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// BookingID holds the value of the "booking_id" field.
 	BookingID uuid.UUID `json:"booking_id,omitempty"`
 	// Status holds the value of the "status" field.
@@ -67,6 +72,8 @@ func (*Ticket) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case ticket.FieldStatus, ticket.FieldPassengerName, ticket.FieldPassengerLicenseID, ticket.FieldPassengerEmail, ticket.FieldSeatNumber, ticket.FieldClass:
 			values[i] = new(sql.NullString)
+		case ticket.FieldCreatedAt, ticket.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case ticket.FieldID, ticket.FieldBookingID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -89,6 +96,18 @@ func (t *Ticket) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				t.ID = *value
+			}
+		case ticket.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				t.CreatedAt = value.Time
+			}
+		case ticket.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				t.UpdatedAt = value.Time
 			}
 		case ticket.FieldBookingID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -173,6 +192,12 @@ func (t *Ticket) String() string {
 	var builder strings.Builder
 	builder.WriteString("Ticket(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(t.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("booking_id=")
 	builder.WriteString(fmt.Sprintf("%v", t.BookingID))
 	builder.WriteString(", ")

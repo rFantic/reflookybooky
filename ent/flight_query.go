@@ -333,12 +333,12 @@ func (fq *FlightQuery) WithDestination(opts ...func(*AirportQuery)) *FlightQuery
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Flight.Query().
-//		GroupBy(flight.FieldName).
+//		GroupBy(flight.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (fq *FlightQuery) GroupBy(field string, fields ...string) *FlightGroupBy {
@@ -356,11 +356,11 @@ func (fq *FlightQuery) GroupBy(field string, fields ...string) *FlightGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Flight.Query().
-//		Select(flight.FieldName).
+//		Select(flight.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (fq *FlightQuery) Select(fields ...string) *FlightSelect {
 	fq.ctx.Fields = append(fq.ctx.Fields, fields...)

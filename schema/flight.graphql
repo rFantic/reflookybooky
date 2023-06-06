@@ -16,6 +16,8 @@ type Flight {
     departure_time: String!
     arrival_time: String!
     status: String!
+    created_at: String!
+    updated_at: String!
 }
 
 input FlightInput{

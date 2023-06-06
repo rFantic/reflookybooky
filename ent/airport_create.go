@@ -8,6 +8,7 @@ import (
 	"flookybooky/ent/airport"
 	"flookybooky/ent/flight"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -19,6 +20,34 @@ type AirportCreate struct {
 	config
 	mutation *AirportMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (ac *AirportCreate) SetCreatedAt(t time.Time) *AirportCreate {
+	ac.mutation.SetCreatedAt(t)
+	return ac
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (ac *AirportCreate) SetNillableCreatedAt(t *time.Time) *AirportCreate {
+	if t != nil {
+		ac.SetCreatedAt(*t)
+	}
+	return ac
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ac *AirportCreate) SetUpdatedAt(t time.Time) *AirportCreate {
+	ac.mutation.SetUpdatedAt(t)
+	return ac
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (ac *AirportCreate) SetNillableUpdatedAt(t *time.Time) *AirportCreate {
+	if t != nil {
+		ac.SetUpdatedAt(*t)
+	}
+	return ac
 }
 
 // SetName sets the "name" field.
@@ -112,6 +141,14 @@ func (ac *AirportCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ac *AirportCreate) defaults() {
+	if _, ok := ac.mutation.CreatedAt(); !ok {
+		v := airport.DefaultCreatedAt()
+		ac.mutation.SetCreatedAt(v)
+	}
+	if _, ok := ac.mutation.UpdatedAt(); !ok {
+		v := airport.DefaultUpdatedAt()
+		ac.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := ac.mutation.ID(); !ok {
 		v := airport.DefaultID()
 		ac.mutation.SetID(v)
@@ -120,6 +157,12 @@ func (ac *AirportCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ac *AirportCreate) check() error {
+	if _, ok := ac.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Airport.created_at"`)}
+	}
+	if _, ok := ac.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Airport.updated_at"`)}
+	}
 	if _, ok := ac.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Airport.name"`)}
 	}
@@ -160,6 +203,14 @@ func (ac *AirportCreate) createSpec() (*Airport, *sqlgraph.CreateSpec) {
 	if id, ok := ac.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := ac.mutation.CreatedAt(); ok {
+		_spec.SetField(airport.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := ac.mutation.UpdatedAt(); ok {
+		_spec.SetField(airport.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if value, ok := ac.mutation.Name(); ok {
 		_spec.SetField(airport.FieldName, field.TypeString, value)

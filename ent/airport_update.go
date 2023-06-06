@@ -9,6 +9,7 @@ import (
 	"flookybooky/ent/flight"
 	"flookybooky/ent/predicate"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -26,6 +27,12 @@ type AirportUpdate struct {
 // Where appends a list predicates to the AirportUpdate builder.
 func (au *AirportUpdate) Where(ps ...predicate.Airport) *AirportUpdate {
 	au.mutation.Where(ps...)
+	return au
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (au *AirportUpdate) SetUpdatedAt(t time.Time) *AirportUpdate {
+	au.mutation.SetUpdatedAt(t)
 	return au
 }
 
@@ -120,6 +127,7 @@ func (au *AirportUpdate) RemoveDestination(f ...*Flight) *AirportUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (au *AirportUpdate) Save(ctx context.Context) (int, error) {
+	au.defaults()
 	return withHooks(ctx, au.sqlSave, au.mutation, au.hooks)
 }
 
@@ -145,6 +153,14 @@ func (au *AirportUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (au *AirportUpdate) defaults() {
+	if _, ok := au.mutation.UpdatedAt(); !ok {
+		v := airport.UpdateDefaultUpdatedAt()
+		au.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (au *AirportUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(airport.Table, airport.Columns, sqlgraph.NewFieldSpec(airport.FieldID, field.TypeUUID))
 	if ps := au.mutation.predicates; len(ps) > 0 {
@@ -153,6 +169,9 @@ func (au *AirportUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := au.mutation.UpdatedAt(); ok {
+		_spec.SetField(airport.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := au.mutation.Name(); ok {
 		_spec.SetField(airport.FieldName, field.TypeString, value)
@@ -270,6 +289,12 @@ type AirportUpdateOne struct {
 	mutation *AirportMutation
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (auo *AirportUpdateOne) SetUpdatedAt(t time.Time) *AirportUpdateOne {
+	auo.mutation.SetUpdatedAt(t)
+	return auo
+}
+
 // SetName sets the "name" field.
 func (auo *AirportUpdateOne) SetName(s string) *AirportUpdateOne {
 	auo.mutation.SetName(s)
@@ -374,6 +399,7 @@ func (auo *AirportUpdateOne) Select(field string, fields ...string) *AirportUpda
 
 // Save executes the query and returns the updated Airport entity.
 func (auo *AirportUpdateOne) Save(ctx context.Context) (*Airport, error) {
+	auo.defaults()
 	return withHooks(ctx, auo.sqlSave, auo.mutation, auo.hooks)
 }
 
@@ -396,6 +422,14 @@ func (auo *AirportUpdateOne) Exec(ctx context.Context) error {
 func (auo *AirportUpdateOne) ExecX(ctx context.Context) {
 	if err := auo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (auo *AirportUpdateOne) defaults() {
+	if _, ok := auo.mutation.UpdatedAt(); !ok {
+		v := airport.UpdateDefaultUpdatedAt()
+		auo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -424,6 +458,9 @@ func (auo *AirportUpdateOne) sqlSave(ctx context.Context) (_node *Airport, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := auo.mutation.UpdatedAt(); ok {
+		_spec.SetField(airport.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := auo.mutation.Name(); ok {
 		_spec.SetField(airport.FieldName, field.TypeString, value)

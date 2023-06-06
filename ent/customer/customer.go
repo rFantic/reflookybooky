@@ -14,6 +14,10 @@ const (
 	Label = "customer"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldAddress holds the string denoting the address field in the database.
@@ -24,8 +28,6 @@ const (
 	FieldPhoneNumber = "phone_number"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldTimestamp holds the string denoting the timestamp field in the database.
-	FieldTimestamp = "timestamp"
 	// Table holds the table name of the customer in the database.
 	Table = "customers"
 )
@@ -33,12 +35,13 @@ const (
 // Columns holds all SQL columns for customer fields.
 var Columns = []string{
 	FieldID,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 	FieldName,
 	FieldAddress,
 	FieldLicenseID,
 	FieldPhoneNumber,
 	FieldEmail,
-	FieldTimestamp,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -52,12 +55,16 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt func() time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
+	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
 	// LicenseIDValidator is a validator for the "license_id" field. It is called by the builders before save.
 	LicenseIDValidator func(string) error
 	// PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	PhoneNumberValidator func(string) error
-	// DefaultTimestamp holds the default value on creation for the "timestamp" field.
-	DefaultTimestamp time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -68,6 +75,16 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -93,9 +110,4 @@ func ByPhoneNumber(opts ...sql.OrderTermOption) OrderOption {
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
-}
-
-// ByTimestamp orders the results by the timestamp field.
-func ByTimestamp(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTimestamp, opts...).ToFunc()
 }

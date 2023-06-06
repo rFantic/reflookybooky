@@ -19,6 +19,10 @@ type Flight struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// OriginID holds the value of the "origin_id" field.
@@ -35,8 +39,6 @@ type Flight struct {
 	AvailableSlots int `json:"available_slots,omitempty"`
 	// Status holds the value of the "status" field.
 	Status flight.Status `json:"status,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FlightQuery when eager-loading is set.
 	Edges        FlightEdges `json:"edges"`
@@ -89,7 +91,7 @@ func (*Flight) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case flight.FieldName, flight.FieldStatus:
 			values[i] = new(sql.NullString)
-		case flight.FieldDepartureTime, flight.FieldArrivalTime, flight.FieldCreatedAt:
+		case flight.FieldCreatedAt, flight.FieldUpdatedAt, flight.FieldDepartureTime, flight.FieldArrivalTime:
 			values[i] = new(sql.NullTime)
 		case flight.FieldID, flight.FieldOriginID, flight.FieldDestinartionID:
 			values[i] = new(uuid.UUID)
@@ -113,6 +115,18 @@ func (f *Flight) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				f.ID = *value
+			}
+		case flight.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				f.CreatedAt = value.Time
+			}
+		case flight.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				f.UpdatedAt = value.Time
 			}
 		case flight.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -162,12 +176,6 @@ func (f *Flight) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				f.Status = flight.Status(value.String)
 			}
-		case flight.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				f.CreatedAt = value.Time
-			}
 		default:
 			f.selectValues.Set(columns[i], values[i])
 		}
@@ -214,6 +222,12 @@ func (f *Flight) String() string {
 	var builder strings.Builder
 	builder.WriteString("Flight(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", f.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(f.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(f.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(f.Name)
 	builder.WriteString(", ")
@@ -237,9 +251,6 @@ func (f *Flight) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", f.Status))
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(f.CreatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -13,6 +13,8 @@ func ParseCustomerEntToPb(in *ent.Customer) (out *pb.Customer) {
 	if in != nil {
 		out.Id = in.ID.String()
 		out.LicenseId = in.LicenseID
+		out.CreatedAt = in.CreatedAt.String()
+		out.UpdatedAt = in.CreatedAt.String()
 	}
 	return out
 }

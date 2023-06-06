@@ -18,6 +18,10 @@ type Booking struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// CustomerID holds the value of the "customer_id" field.
 	CustomerID uuid.UUID `json:"customer_id,omitempty"`
 	// GoingFlightID holds the value of the "going_flight_id" field.
@@ -26,8 +30,6 @@ type Booking struct {
 	ReturnFlightID uuid.UUID `json:"return_flight_id,omitempty"`
 	// Status holds the value of the "status" field.
 	Status booking.Status `json:"status,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookingQuery when eager-loading is set.
 	Edges        BookingEdges `json:"edges"`
@@ -59,7 +61,7 @@ func (*Booking) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case booking.FieldStatus:
 			values[i] = new(sql.NullString)
-		case booking.FieldCreatedAt:
+		case booking.FieldCreatedAt, booking.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case booking.FieldID, booking.FieldCustomerID, booking.FieldGoingFlightID, booking.FieldReturnFlightID:
 			values[i] = new(uuid.UUID)
@@ -84,6 +86,18 @@ func (b *Booking) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				b.ID = *value
 			}
+		case booking.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				b.CreatedAt = value.Time
+			}
+		case booking.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				b.UpdatedAt = value.Time
+			}
 		case booking.FieldCustomerID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field customer_id", values[i])
@@ -107,12 +121,6 @@ func (b *Booking) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				b.Status = booking.Status(value.String)
-			}
-		case booking.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				b.CreatedAt = value.Time
 			}
 		default:
 			b.selectValues.Set(columns[i], values[i])
@@ -155,6 +163,12 @@ func (b *Booking) String() string {
 	var builder strings.Builder
 	builder.WriteString("Booking(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", b.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(b.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(b.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("customer_id=")
 	builder.WriteString(fmt.Sprintf("%v", b.CustomerID))
 	builder.WriteString(", ")
@@ -166,9 +180,6 @@ func (b *Booking) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", b.Status))
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(b.CreatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

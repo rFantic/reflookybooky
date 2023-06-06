@@ -55,6 +55,16 @@ func IDLTE(id uuid.UUID) predicate.Customer {
 	return predicate.Customer(sql.FieldLTE(FieldID, id))
 }
 
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Customer {
 	return predicate.Customer(sql.FieldEQ(FieldName, v))
@@ -80,9 +90,84 @@ func Email(v string) predicate.Customer {
 	return predicate.Customer(sql.FieldEQ(FieldEmail, v))
 }
 
-// Timestamp applies equality check predicate on the "timestamp" field. It's identical to TimestampEQ.
-func Timestamp(v time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldEQ(FieldTimestamp, v))
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Customer {
+	return predicate.Customer(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -408,46 +493,6 @@ func EmailEqualFold(v string) predicate.Customer {
 // EmailContainsFold applies the ContainsFold predicate on the "email" field.
 func EmailContainsFold(v string) predicate.Customer {
 	return predicate.Customer(sql.FieldContainsFold(FieldEmail, v))
-}
-
-// TimestampEQ applies the EQ predicate on the "timestamp" field.
-func TimestampEQ(v time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldEQ(FieldTimestamp, v))
-}
-
-// TimestampNEQ applies the NEQ predicate on the "timestamp" field.
-func TimestampNEQ(v time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldNEQ(FieldTimestamp, v))
-}
-
-// TimestampIn applies the In predicate on the "timestamp" field.
-func TimestampIn(vs ...time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldIn(FieldTimestamp, vs...))
-}
-
-// TimestampNotIn applies the NotIn predicate on the "timestamp" field.
-func TimestampNotIn(vs ...time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldNotIn(FieldTimestamp, vs...))
-}
-
-// TimestampGT applies the GT predicate on the "timestamp" field.
-func TimestampGT(v time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldGT(FieldTimestamp, v))
-}
-
-// TimestampGTE applies the GTE predicate on the "timestamp" field.
-func TimestampGTE(v time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldGTE(FieldTimestamp, v))
-}
-
-// TimestampLT applies the LT predicate on the "timestamp" field.
-func TimestampLT(v time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldLT(FieldTimestamp, v))
-}
-
-// TimestampLTE applies the LTE predicate on the "timestamp" field.
-func TimestampLTE(v time.Time) predicate.Customer {
-	return predicate.Customer(sql.FieldLTE(FieldTimestamp, v))
 }
 
 // And groups predicates with the AND operator between them.

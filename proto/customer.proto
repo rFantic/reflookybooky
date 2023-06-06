@@ -11,6 +11,8 @@ message Customer {
     string license_id = 4;
     string phone_number = 5;
     string email = 6;
+    string created_at = 7;
+    string updated_at = 8;
 }
 
 message CustomerInput {

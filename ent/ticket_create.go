@@ -8,6 +8,7 @@ import (
 	"flookybooky/ent/booking"
 	"flookybooky/ent/ticket"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -19,6 +20,34 @@ type TicketCreate struct {
 	config
 	mutation *TicketMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tc *TicketCreate) SetCreatedAt(t time.Time) *TicketCreate {
+	tc.mutation.SetCreatedAt(t)
+	return tc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tc *TicketCreate) SetNillableCreatedAt(t *time.Time) *TicketCreate {
+	if t != nil {
+		tc.SetCreatedAt(*t)
+	}
+	return tc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tc *TicketCreate) SetUpdatedAt(t time.Time) *TicketCreate {
+	tc.mutation.SetUpdatedAt(t)
+	return tc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (tc *TicketCreate) SetNillableUpdatedAt(t *time.Time) *TicketCreate {
+	if t != nil {
+		tc.SetUpdatedAt(*t)
+	}
+	return tc
 }
 
 // SetBookingID sets the "booking_id" field.
@@ -117,6 +146,14 @@ func (tc *TicketCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (tc *TicketCreate) defaults() {
+	if _, ok := tc.mutation.CreatedAt(); !ok {
+		v := ticket.DefaultCreatedAt()
+		tc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := tc.mutation.UpdatedAt(); !ok {
+		v := ticket.DefaultUpdatedAt()
+		tc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := tc.mutation.ID(); !ok {
 		v := ticket.DefaultID()
 		tc.mutation.SetID(v)
@@ -125,6 +162,12 @@ func (tc *TicketCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (tc *TicketCreate) check() error {
+	if _, ok := tc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Ticket.created_at"`)}
+	}
+	if _, ok := tc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Ticket.updated_at"`)}
+	}
 	if _, ok := tc.mutation.BookingID(); !ok {
 		return &ValidationError{Name: "booking_id", err: errors.New(`ent: missing required field "Ticket.booking_id"`)}
 	}
@@ -193,6 +236,14 @@ func (tc *TicketCreate) createSpec() (*Ticket, *sqlgraph.CreateSpec) {
 	if id, ok := tc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := tc.mutation.CreatedAt(); ok {
+		_spec.SetField(ticket.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := tc.mutation.UpdatedAt(); ok {
+		_spec.SetField(ticket.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if value, ok := tc.mutation.Status(); ok {
 		_spec.SetField(ticket.FieldStatus, field.TypeEnum, value)

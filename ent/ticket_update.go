@@ -9,6 +9,7 @@ import (
 	"flookybooky/ent/predicate"
 	"flookybooky/ent/ticket"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -26,6 +27,12 @@ type TicketUpdate struct {
 // Where appends a list predicates to the TicketUpdate builder.
 func (tu *TicketUpdate) Where(ps ...predicate.Ticket) *TicketUpdate {
 	tu.mutation.Where(ps...)
+	return tu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tu *TicketUpdate) SetUpdatedAt(t time.Time) *TicketUpdate {
+	tu.mutation.SetUpdatedAt(t)
 	return tu
 }
 
@@ -89,6 +96,7 @@ func (tu *TicketUpdate) ClearBooking() *TicketUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (tu *TicketUpdate) Save(ctx context.Context) (int, error) {
+	tu.defaults()
 	return withHooks(ctx, tu.sqlSave, tu.mutation, tu.hooks)
 }
 
@@ -111,6 +119,14 @@ func (tu *TicketUpdate) Exec(ctx context.Context) error {
 func (tu *TicketUpdate) ExecX(ctx context.Context) {
 	if err := tu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tu *TicketUpdate) defaults() {
+	if _, ok := tu.mutation.UpdatedAt(); !ok {
+		v := ticket.UpdateDefaultUpdatedAt()
+		tu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -143,6 +159,9 @@ func (tu *TicketUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tu.mutation.UpdatedAt(); ok {
+		_spec.SetField(ticket.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := tu.mutation.Status(); ok {
 		_spec.SetField(ticket.FieldStatus, field.TypeEnum, value)
@@ -209,6 +228,12 @@ type TicketUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *TicketMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tuo *TicketUpdateOne) SetUpdatedAt(t time.Time) *TicketUpdateOne {
+	tuo.mutation.SetUpdatedAt(t)
+	return tuo
 }
 
 // SetBookingID sets the "booking_id" field.
@@ -284,6 +309,7 @@ func (tuo *TicketUpdateOne) Select(field string, fields ...string) *TicketUpdate
 
 // Save executes the query and returns the updated Ticket entity.
 func (tuo *TicketUpdateOne) Save(ctx context.Context) (*Ticket, error) {
+	tuo.defaults()
 	return withHooks(ctx, tuo.sqlSave, tuo.mutation, tuo.hooks)
 }
 
@@ -306,6 +332,14 @@ func (tuo *TicketUpdateOne) Exec(ctx context.Context) error {
 func (tuo *TicketUpdateOne) ExecX(ctx context.Context) {
 	if err := tuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tuo *TicketUpdateOne) defaults() {
+	if _, ok := tuo.mutation.UpdatedAt(); !ok {
+		v := ticket.UpdateDefaultUpdatedAt()
+		tuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -355,6 +389,9 @@ func (tuo *TicketUpdateOne) sqlSave(ctx context.Context) (_node *Ticket, err err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(ticket.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := tuo.mutation.Status(); ok {
 		_spec.SetField(ticket.FieldStatus, field.TypeEnum, value)

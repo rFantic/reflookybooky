@@ -9,6 +9,7 @@ import (
 	"flookybooky/ent/predicate"
 	"flookybooky/ent/ticket"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -26,6 +27,12 @@ type BookingUpdate struct {
 // Where appends a list predicates to the BookingUpdate builder.
 func (bu *BookingUpdate) Where(ps ...predicate.Booking) *BookingUpdate {
 	bu.mutation.Where(ps...)
+	return bu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bu *BookingUpdate) SetUpdatedAt(t time.Time) *BookingUpdate {
+	bu.mutation.SetUpdatedAt(t)
 	return bu
 }
 
@@ -110,6 +117,7 @@ func (bu *BookingUpdate) RemoveTicket(t ...*Ticket) *BookingUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (bu *BookingUpdate) Save(ctx context.Context) (int, error) {
+	bu.defaults()
 	return withHooks(ctx, bu.sqlSave, bu.mutation, bu.hooks)
 }
 
@@ -135,6 +143,14 @@ func (bu *BookingUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (bu *BookingUpdate) defaults() {
+	if _, ok := bu.mutation.UpdatedAt(); !ok {
+		v := booking.UpdateDefaultUpdatedAt()
+		bu.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (bu *BookingUpdate) check() error {
 	if v, ok := bu.mutation.Status(); ok {
@@ -156,6 +172,9 @@ func (bu *BookingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := bu.mutation.UpdatedAt(); ok {
+		_spec.SetField(booking.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := bu.mutation.CustomerID(); ok {
 		_spec.SetField(booking.FieldCustomerID, field.TypeUUID, value)
@@ -235,6 +254,12 @@ type BookingUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *BookingMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (buo *BookingUpdateOne) SetUpdatedAt(t time.Time) *BookingUpdateOne {
+	buo.mutation.SetUpdatedAt(t)
+	return buo
 }
 
 // SetCustomerID sets the "customer_id" field.
@@ -331,6 +356,7 @@ func (buo *BookingUpdateOne) Select(field string, fields ...string) *BookingUpda
 
 // Save executes the query and returns the updated Booking entity.
 func (buo *BookingUpdateOne) Save(ctx context.Context) (*Booking, error) {
+	buo.defaults()
 	return withHooks(ctx, buo.sqlSave, buo.mutation, buo.hooks)
 }
 
@@ -353,6 +379,14 @@ func (buo *BookingUpdateOne) Exec(ctx context.Context) error {
 func (buo *BookingUpdateOne) ExecX(ctx context.Context) {
 	if err := buo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (buo *BookingUpdateOne) defaults() {
+	if _, ok := buo.mutation.UpdatedAt(); !ok {
+		v := booking.UpdateDefaultUpdatedAt()
+		buo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -394,6 +428,9 @@ func (buo *BookingUpdateOne) sqlSave(ctx context.Context) (_node *Booking, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := buo.mutation.UpdatedAt(); ok {
+		_spec.SetField(booking.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := buo.mutation.CustomerID(); ok {
 		_spec.SetField(booking.FieldCustomerID, field.TypeUUID, value)

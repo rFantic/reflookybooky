@@ -54,9 +54,11 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Airport struct {
-		Address func(childComplexity int) int
-		ID      func(childComplexity int) int
-		Name    func(childComplexity int) int
+		Address   func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Name      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
 	}
 
 	AirportOps struct {
@@ -64,12 +66,14 @@ type ComplexityRoot struct {
 	}
 
 	Booking struct {
+		CreatedAt    func(childComplexity int) int
 		Customer     func(childComplexity int) int
 		GoingFlight  func(childComplexity int) int
 		ID           func(childComplexity int) int
 		ReturnFlight func(childComplexity int) int
 		Status       func(childComplexity int) int
 		Ticket       func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
 	}
 
 	BookingOps struct {
@@ -80,11 +84,13 @@ type ComplexityRoot struct {
 
 	Customer struct {
 		Address     func(childComplexity int) int
+		CreatedAt   func(childComplexity int) int
 		Email       func(childComplexity int) int
 		ID          func(childComplexity int) int
 		LicenseID   func(childComplexity int) int
 		Name        func(childComplexity int) int
 		PhoneNumber func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
 	}
 
 	CustomerOps struct {
@@ -95,6 +101,7 @@ type ComplexityRoot struct {
 	Flight struct {
 		ArrivalTime    func(childComplexity int) int
 		AvailableSlots func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
 		DepartureTime  func(childComplexity int) int
 		Destination    func(childComplexity int) int
 		ID             func(childComplexity int) int
@@ -102,6 +109,7 @@ type ComplexityRoot struct {
 		Origin         func(childComplexity int) int
 		Status         func(childComplexity int) int
 		TotalSlots     func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
 	}
 
 	FlightOps struct {
@@ -136,6 +144,7 @@ type ComplexityRoot struct {
 
 	Ticket struct {
 		Booking            func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		PassengerEmail     func(childComplexity int) int
 		PassengerLicenseID func(childComplexity int) int
@@ -143,14 +152,17 @@ type ComplexityRoot struct {
 		SeatNumber         func(childComplexity int) int
 		Status             func(childComplexity int) int
 		TicketClass        func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
 	}
 
 	User struct {
-		Customer func(childComplexity int) int
-		Email    func(childComplexity int) int
-		ID       func(childComplexity int) int
-		Role     func(childComplexity int) int
-		Username func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		Customer  func(childComplexity int) int
+		Email     func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Role      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+		Username  func(childComplexity int) int
 	}
 
 	UserOps struct {
@@ -237,6 +249,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Airport.Address(childComplexity), true
 
+	case "Airport.created_at":
+		if e.complexity.Airport.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Airport.CreatedAt(childComplexity), true
+
 	case "Airport.id":
 		if e.complexity.Airport.ID == nil {
 			break
@@ -251,6 +270,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Airport.Name(childComplexity), true
 
+	case "Airport.updated_at":
+		if e.complexity.Airport.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Airport.UpdatedAt(childComplexity), true
+
 	case "AirportOps.createAirport":
 		if e.complexity.AirportOps.CreateAirport == nil {
 			break
@@ -262,6 +288,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AirportOps.CreateAirport(childComplexity, args["input"].(model.AirportInput)), true
+
+	case "Booking.created_at":
+		if e.complexity.Booking.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Booking.CreatedAt(childComplexity), true
 
 	case "Booking.customer":
 		if e.complexity.Booking.Customer == nil {
@@ -304,6 +337,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Booking.Ticket(childComplexity), true
+
+	case "Booking.updated_at":
+		if e.complexity.Booking.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Booking.UpdatedAt(childComplexity), true
 
 	case "BookingOps.cancelBooking":
 		if e.complexity.BookingOps.CancelBooking == nil {
@@ -348,6 +388,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Customer.Address(childComplexity), true
 
+	case "Customer.created_at":
+		if e.complexity.Customer.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Customer.CreatedAt(childComplexity), true
+
 	case "Customer.email":
 		if e.complexity.Customer.Email == nil {
 			break
@@ -382,6 +429,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Customer.PhoneNumber(childComplexity), true
+
+	case "Customer.updated_at":
+		if e.complexity.Customer.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Customer.UpdatedAt(childComplexity), true
 
 	case "CustomerOps.createCustomer":
 		if e.complexity.CustomerOps.CreateCustomer == nil {
@@ -420,6 +474,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Flight.AvailableSlots(childComplexity), true
+
+	case "Flight.created_at":
+		if e.complexity.Flight.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Flight.CreatedAt(childComplexity), true
 
 	case "Flight.departure_time":
 		if e.complexity.Flight.DepartureTime == nil {
@@ -469,6 +530,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Flight.TotalSlots(childComplexity), true
+
+	case "Flight.updated_at":
+		if e.complexity.Flight.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Flight.UpdatedAt(childComplexity), true
 
 	case "FlightOps.cancelFlight":
 		if e.complexity.FlightOps.CancelFlight == nil {
@@ -658,6 +726,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Ticket.Booking(childComplexity), true
 
+	case "Ticket.created_at":
+		if e.complexity.Ticket.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Ticket.CreatedAt(childComplexity), true
+
 	case "Ticket.id":
 		if e.complexity.Ticket.ID == nil {
 			break
@@ -707,6 +782,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Ticket.TicketClass(childComplexity), true
 
+	case "Ticket.updated_at":
+		if e.complexity.Ticket.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Ticket.UpdatedAt(childComplexity), true
+
+	case "User.created_at":
+		if e.complexity.User.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.User.CreatedAt(childComplexity), true
+
 	case "User.customer":
 		if e.complexity.User.Customer == nil {
 			break
@@ -734,6 +823,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.User.Role(childComplexity), true
+
+	case "User.updated_at":
+		if e.complexity.User.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.User.UpdatedAt(childComplexity), true
 
 	case "User.username":
 		if e.complexity.User.Username == nil {
@@ -866,6 +962,8 @@ var sources = []*ast.Source{
     id: String!
     name: String!
     address: String!
+    created_at: String!
+    updated_at: String!
 }
 
 input AirportInput{
@@ -897,6 +995,8 @@ type Booking {
     customer: Customer!  @goField(forceResolver: true)
     status: BookingStatus!
     ticket: [Ticket]!  @goField(forceResolver: true)
+    created_at: String!
+    updated_at: String!
 }
 
 input BookingInput{
@@ -956,6 +1056,8 @@ input Pagination {
     license_id: String!
     phone_number: String!
     email: String!
+    created_at: String!
+    updated_at: String!
 }
 
 input CustomerInput {
@@ -1006,6 +1108,8 @@ type Flight {
     departure_time: String!
     arrival_time: String!
     status: String!
+    created_at: String!
+    updated_at: String!
 }
 
 input FlightInput{
@@ -1077,6 +1181,8 @@ type Ticket {
     seat_number: String!
     ticket_class: TicketClass!
     status: TicketStatus!
+    created_at: String!
+    updated_at: String!
 }
 
 input TicketInput{
@@ -1098,6 +1204,8 @@ extend type Query {
     email: String!
     role: String!
     customer: Customer @goField(forceResolver: true)
+    created_at: String!
+    updated_at: String!
 }
 
 input UserInput {
@@ -1651,6 +1759,94 @@ func (ec *executionContext) fieldContext_Airport_address(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Airport_created_at(ctx context.Context, field graphql.CollectedField, obj *model.Airport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Airport_created_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Airport_created_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Airport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Airport_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.Airport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Airport_updated_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Airport_updated_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Airport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _AirportOps_createAirport(ctx context.Context, field graphql.CollectedField, obj *model.AirportOps) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AirportOps_createAirport(ctx, field)
 	if err != nil {
@@ -1720,6 +1916,10 @@ func (ec *executionContext) fieldContext_AirportOps_createAirport(ctx context.Co
 				return ec.fieldContext_Airport_name(ctx, field)
 			case "address":
 				return ec.fieldContext_Airport_address(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Airport_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Airport_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Airport", field.Name)
 		},
@@ -1839,6 +2039,10 @@ func (ec *executionContext) fieldContext_Booking_going_flight(ctx context.Contex
 				return ec.fieldContext_Flight_arrival_time(ctx, field)
 			case "status":
 				return ec.fieldContext_Flight_status(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Flight_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Flight_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Flight", field.Name)
 		},
@@ -1903,6 +2107,10 @@ func (ec *executionContext) fieldContext_Booking_return_flight(ctx context.Conte
 				return ec.fieldContext_Flight_arrival_time(ctx, field)
 			case "status":
 				return ec.fieldContext_Flight_status(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Flight_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Flight_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Flight", field.Name)
 		},
@@ -1961,6 +2169,10 @@ func (ec *executionContext) fieldContext_Booking_customer(ctx context.Context, f
 				return ec.fieldContext_Customer_phone_number(ctx, field)
 			case "email":
 				return ec.fieldContext_Customer_email(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Customer_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Customer_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Customer", field.Name)
 		},
@@ -2067,8 +2279,100 @@ func (ec *executionContext) fieldContext_Booking_ticket(ctx context.Context, fie
 				return ec.fieldContext_Ticket_ticket_class(ctx, field)
 			case "status":
 				return ec.fieldContext_Ticket_status(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Ticket_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Ticket_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Ticket", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Booking_created_at(ctx context.Context, field graphql.CollectedField, obj *model.Booking) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Booking_created_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Booking_created_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Booking",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Booking_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.Booking) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Booking_updated_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Booking_updated_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Booking",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2125,6 +2429,10 @@ func (ec *executionContext) fieldContext_BookingOps_createBookingForGuest(ctx co
 				return ec.fieldContext_Booking_status(ctx, field)
 			case "ticket":
 				return ec.fieldContext_Booking_ticket(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Booking_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Booking_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Booking", field.Name)
 		},
@@ -2218,6 +2526,10 @@ func (ec *executionContext) fieldContext_BookingOps_createBooking(ctx context.Co
 				return ec.fieldContext_Booking_status(ctx, field)
 			case "ticket":
 				return ec.fieldContext_Booking_ticket(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Booking_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Booking_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Booking", field.Name)
 		},
@@ -2555,6 +2867,94 @@ func (ec *executionContext) fieldContext_Customer_email(ctx context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _Customer_created_at(ctx context.Context, field graphql.CollectedField, obj *model.Customer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Customer_created_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Customer_created_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Customer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Customer_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.Customer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Customer_updated_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Customer_updated_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Customer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _CustomerOps_createCustomer(ctx context.Context, field graphql.CollectedField, obj *model.CustomerOps) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CustomerOps_createCustomer(ctx, field)
 	if err != nil {
@@ -2630,6 +3030,10 @@ func (ec *executionContext) fieldContext_CustomerOps_createCustomer(ctx context.
 				return ec.fieldContext_Customer_phone_number(ctx, field)
 			case "email":
 				return ec.fieldContext_Customer_email(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Customer_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Customer_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Customer", field.Name)
 		},
@@ -2860,6 +3264,10 @@ func (ec *executionContext) fieldContext_Flight_origin(ctx context.Context, fiel
 				return ec.fieldContext_Airport_name(ctx, field)
 			case "address":
 				return ec.fieldContext_Airport_address(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Airport_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Airport_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Airport", field.Name)
 		},
@@ -2912,6 +3320,10 @@ func (ec *executionContext) fieldContext_Flight_destination(ctx context.Context,
 				return ec.fieldContext_Airport_name(ctx, field)
 			case "address":
 				return ec.fieldContext_Airport_address(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Airport_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Airport_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Airport", field.Name)
 		},
@@ -3139,6 +3551,94 @@ func (ec *executionContext) fieldContext_Flight_status(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Flight_created_at(ctx context.Context, field graphql.CollectedField, obj *model.Flight) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Flight_created_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Flight_created_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Flight",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Flight_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.Flight) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Flight_updated_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Flight_updated_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Flight",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _FlightOps_createFlight(ctx context.Context, field graphql.CollectedField, obj *model.FlightOps) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_FlightOps_createFlight(ctx, field)
 	if err != nil {
@@ -3220,6 +3720,10 @@ func (ec *executionContext) fieldContext_FlightOps_createFlight(ctx context.Cont
 				return ec.fieldContext_Flight_arrival_time(ctx, field)
 			case "status":
 				return ec.fieldContext_Flight_status(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Flight_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Flight_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Flight", field.Name)
 		},
@@ -3763,6 +4267,10 @@ func (ec *executionContext) fieldContext_Query_airport(ctx context.Context, fiel
 				return ec.fieldContext_Airport_name(ctx, field)
 			case "address":
 				return ec.fieldContext_Airport_address(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Airport_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Airport_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Airport", field.Name)
 		},
@@ -3856,6 +4364,10 @@ func (ec *executionContext) fieldContext_Query_booking(ctx context.Context, fiel
 				return ec.fieldContext_Booking_status(ctx, field)
 			case "ticket":
 				return ec.fieldContext_Booking_ticket(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Booking_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Booking_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Booking", field.Name)
 		},
@@ -3949,6 +4461,10 @@ func (ec *executionContext) fieldContext_Query_customers(ctx context.Context, fi
 				return ec.fieldContext_Customer_phone_number(ctx, field)
 			case "email":
 				return ec.fieldContext_Customer_email(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Customer_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Customer_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Customer", field.Name)
 		},
@@ -4024,6 +4540,10 @@ func (ec *executionContext) fieldContext_Query_flight(ctx context.Context, field
 				return ec.fieldContext_Flight_arrival_time(ctx, field)
 			case "status":
 				return ec.fieldContext_Flight_status(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Flight_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Flight_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Flight", field.Name)
 		},
@@ -4099,6 +4619,10 @@ func (ec *executionContext) fieldContext_Query_searchFlight(ctx context.Context,
 				return ec.fieldContext_Flight_arrival_time(ctx, field)
 			case "status":
 				return ec.fieldContext_Flight_status(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Flight_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Flight_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Flight", field.Name)
 		},
@@ -4196,6 +4720,10 @@ func (ec *executionContext) fieldContext_Query_ticket(ctx context.Context, field
 				return ec.fieldContext_Ticket_ticket_class(ctx, field)
 			case "status":
 				return ec.fieldContext_Ticket_status(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Ticket_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Ticket_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Ticket", field.Name)
 		},
@@ -4287,6 +4815,10 @@ func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field 
 				return ec.fieldContext_User_role(ctx, field)
 			case "customer":
 				return ec.fieldContext_User_customer(ctx, field)
+			case "created_at":
+				return ec.fieldContext_User_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_User_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -4632,6 +5164,10 @@ func (ec *executionContext) fieldContext_Ticket_booking(ctx context.Context, fie
 				return ec.fieldContext_Booking_status(ctx, field)
 			case "ticket":
 				return ec.fieldContext_Booking_ticket(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Booking_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Booking_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Booking", field.Name)
 		},
@@ -4903,6 +5439,94 @@ func (ec *executionContext) fieldContext_Ticket_status(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Ticket_created_at(ctx context.Context, field graphql.CollectedField, obj *model.Ticket) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Ticket_created_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Ticket_created_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Ticket",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Ticket_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.Ticket) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Ticket_updated_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Ticket_updated_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Ticket",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_id(ctx, field)
 	if err != nil {
@@ -5127,8 +5751,100 @@ func (ec *executionContext) fieldContext_User_customer(ctx context.Context, fiel
 				return ec.fieldContext_Customer_phone_number(ctx, field)
 			case "email":
 				return ec.fieldContext_Customer_email(ctx, field)
+			case "created_at":
+				return ec.fieldContext_Customer_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_Customer_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Customer", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_created_at(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_created_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_created_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_updated_at(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_updated_at(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_updated_at(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5183,6 +5899,10 @@ func (ec *executionContext) fieldContext_UserOps_register(ctx context.Context, f
 				return ec.fieldContext_User_role(ctx, field)
 			case "customer":
 				return ec.fieldContext_User_customer(ctx, field)
+			case "created_at":
+				return ec.fieldContext_User_created_at(ctx, field)
+			case "updated_at":
+				return ec.fieldContext_User_updated_at(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -7150,18 +7870,20 @@ func (ec *executionContext) unmarshalInputAirportInput(ctx context.Context, obj 
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Name = data
 		case "address":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
-			it.Address, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Address = data
 		}
 	}
 
@@ -7186,10 +7908,11 @@ func (ec *executionContext) unmarshalInputBookingCancelInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ID = data
 		}
 	}
 
@@ -7214,42 +7937,47 @@ func (ec *executionContext) unmarshalInputBookingInput(ctx context.Context, obj 
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customerId"))
-			it.CustomerID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.CustomerID = data
 		case "going_flight_id":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("going_flight_id"))
-			it.GoingFlightID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.GoingFlightID = data
 		case "return_flight_id":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("return_flight_id"))
-			it.ReturnFlightID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ReturnFlightID = data
 		case "ticket":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ticket"))
-			it.Ticket, err = ec.unmarshalNTicketInput2ᚕᚖflookybookyᚋmodelᚐTicketInput(ctx, v)
+			data, err := ec.unmarshalNTicketInput2ᚕᚖflookybookyᚋmodelᚐTicketInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Ticket = data
 		case "status":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNBookingStatus2flookybookyᚋmodelᚐBookingStatus(ctx, v)
+			data, err := ec.unmarshalNBookingStatus2flookybookyᚋmodelᚐBookingStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Status = data
 		}
 	}
 
@@ -7274,42 +8002,47 @@ func (ec *executionContext) unmarshalInputBookingInputForGuest(ctx context.Conte
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customer"))
-			it.Customer, err = ec.unmarshalNCustomerInput2ᚖflookybookyᚋmodelᚐCustomerInput(ctx, v)
+			data, err := ec.unmarshalNCustomerInput2ᚖflookybookyᚋmodelᚐCustomerInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Customer = data
 		case "going_flight_id":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("going_flight_id"))
-			it.GoingFlightID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.GoingFlightID = data
 		case "return_flight_id":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("return_flight_id"))
-			it.ReturnFlightID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ReturnFlightID = data
 		case "ticket":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ticket"))
-			it.Ticket, err = ec.unmarshalNTicketInput2ᚕᚖflookybookyᚋmodelᚐTicketInput(ctx, v)
+			data, err := ec.unmarshalNTicketInput2ᚕᚖflookybookyᚋmodelᚐTicketInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Ticket = data
 		case "status":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNBookingStatus2flookybookyᚋmodelᚐBookingStatus(ctx, v)
+			data, err := ec.unmarshalNBookingStatus2flookybookyᚋmodelᚐBookingStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Status = data
 		}
 	}
 
@@ -7334,42 +8067,47 @@ func (ec *executionContext) unmarshalInputCustomerInput(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Name = data
 		case "address":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
-			it.Address, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Address = data
 		case "license_id":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("license_id"))
-			it.LicenseID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.LicenseID = data
 		case "phone_number":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("phone_number"))
-			it.PhoneNumber, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.PhoneNumber = data
 		case "email":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-			it.Email, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Email = data
 		}
 	}
 
@@ -7394,50 +8132,56 @@ func (ec *executionContext) unmarshalInputCustomerUpdateInput(ctx context.Contex
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ID = data
 		case "name":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Name = data
 		case "address":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
-			it.Address, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Address = data
 		case "license_id":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("license_id"))
-			it.LicenseID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.LicenseID = data
 		case "phone_number":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("phone_number"))
-			it.PhoneNumber, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.PhoneNumber = data
 		case "email":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-			it.Email, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Email = data
 		}
 	}
 
@@ -7462,10 +8206,11 @@ func (ec *executionContext) unmarshalInputFlightCancelInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ID = data
 		}
 	}
 
@@ -7490,58 +8235,65 @@ func (ec *executionContext) unmarshalInputFlightInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Name = data
 		case "originId":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("originId"))
-			it.OriginID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.OriginID = data
 		case "destinationId":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("destinationId"))
-			it.DestinationID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.DestinationID = data
 		case "total_slots":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("total_slots"))
-			it.TotalSlots, err = ec.unmarshalNInt2int(ctx, v)
+			data, err := ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.TotalSlots = data
 		case "departure_time":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("departure_time"))
-			it.DepartureTime, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.DepartureTime = data
 		case "arrival_time":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("arrival_time"))
-			it.ArrivalTime, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ArrivalTime = data
 		case "status":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNFlightStatus2flookybookyᚋmodelᚐFlightStatus(ctx, v)
+			data, err := ec.unmarshalNFlightStatus2flookybookyᚋmodelᚐFlightStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Status = data
 		}
 	}
 
@@ -7566,50 +8318,56 @@ func (ec *executionContext) unmarshalInputFlightSearchInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("available_slots_at_least"))
-			it.AvailableSlotsAtLeast, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.AvailableSlotsAtLeast = data
 		case "origin_id":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("origin_id"))
-			it.OriginID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.OriginID = data
 		case "destination_id":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("destination_id"))
-			it.DestinationID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.DestinationID = data
 		case "departure_time_before":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("departure_time_before"))
-			it.DepartureTimeBefore, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.DepartureTimeBefore = data
 		case "departure_time_after":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("departure_time_after"))
-			it.DepartureTimeAfter, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.DepartureTimeAfter = data
 		case "status":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalOFlightStatus2ᚖflookybookyᚋmodelᚐFlightStatus(ctx, v)
+			data, err := ec.unmarshalOFlightStatus2ᚖflookybookyᚋmodelᚐFlightStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Status = data
 		}
 	}
 
@@ -7634,66 +8392,74 @@ func (ec *executionContext) unmarshalInputFlightUpdateInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ID = data
 		case "name":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Name = data
 		case "originId":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("originId"))
-			it.OriginID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.OriginID = data
 		case "destinationId":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("destinationId"))
-			it.DestinationID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.DestinationID = data
 		case "total_slots":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("total_slots"))
-			it.TotalSlots, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.TotalSlots = data
 		case "departure_time":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("departure_time"))
-			it.DepartureTime, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.DepartureTime = data
 		case "arrival_time":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("arrival_time"))
-			it.ArrivalTime, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ArrivalTime = data
 		case "status":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalOFlightStatus2ᚖflookybookyᚋmodelᚐFlightStatus(ctx, v)
+			data, err := ec.unmarshalOFlightStatus2ᚖflookybookyᚋmodelᚐFlightStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Status = data
 		}
 	}
 
@@ -7718,18 +8484,20 @@ func (ec *executionContext) unmarshalInputLoginInput(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
-			it.Username, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Username = data
 		case "password":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-			it.Password, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Password = data
 		}
 	}
 
@@ -7754,34 +8522,38 @@ func (ec *executionContext) unmarshalInputPagination(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ascFields"))
-			it.AscFields, err = ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.AscFields = data
 		case "desFields":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("desFields"))
-			it.DesFields, err = ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.DesFields = data
 		case "limit":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
-			it.Limit, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Limit = data
 		case "offset":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
-			it.Offset, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Offset = data
 		}
 	}
 
@@ -7806,26 +8578,29 @@ func (ec *executionContext) unmarshalInputPasswordUpdateInput(ctx context.Contex
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ID = data
 		case "previous_password":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("previous_password"))
-			it.PreviousPassword, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.PreviousPassword = data
 		case "new_password":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("new_password"))
-			it.NewPassword, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.NewPassword = data
 		}
 	}
 
@@ -7850,50 +8625,56 @@ func (ec *executionContext) unmarshalInputTicketInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("passenger_license_id"))
-			it.PassengerLicenseID, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.PassengerLicenseID = data
 		case "passenger_name":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("passenger_name"))
-			it.PassengerName, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.PassengerName = data
 		case "passenger_email":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("passenger_email"))
-			it.PassengerEmail, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.PassengerEmail = data
 		case "seat_number":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seat_number"))
-			it.SeatNumber, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.SeatNumber = data
 		case "ticket_class":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ticket_class"))
-			it.TicketClass, err = ec.unmarshalNTicketClass2flookybookyᚋmodelᚐTicketClass(ctx, v)
+			data, err := ec.unmarshalNTicketClass2flookybookyᚋmodelᚐTicketClass(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.TicketClass = data
 		case "status":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNTicketStatus2flookybookyᚋmodelᚐTicketStatus(ctx, v)
+			data, err := ec.unmarshalNTicketStatus2flookybookyᚋmodelᚐTicketStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Status = data
 		}
 	}
 
@@ -7918,42 +8699,47 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
-			it.Username, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Username = data
 		case "password":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-			it.Password, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Password = data
 		case "email":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-			it.Email, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Email = data
 		case "role":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-			it.Role, err = ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Role = data
 		case "customer":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("customer"))
-			it.Customer, err = ec.unmarshalOCustomerInput2ᚖflookybookyᚋmodelᚐCustomerInput(ctx, v)
+			data, err := ec.unmarshalOCustomerInput2ᚖflookybookyᚋmodelᚐCustomerInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Customer = data
 		}
 	}
 
@@ -7978,26 +8764,29 @@ func (ec *executionContext) unmarshalInputUserUpdateInput(ctx context.Context, o
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.ID = data
 		case "email":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-			it.Email, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Email = data
 		case "role":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-			it.Role, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+			it.Role = data
 		}
 	}
 
@@ -8039,6 +8828,20 @@ func (ec *executionContext) _Airport(ctx context.Context, sel ast.SelectionSet, 
 		case "address":
 
 			out.Values[i] = ec._Airport_address(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "created_at":
+
+			out.Values[i] = ec._Airport_created_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updated_at":
+
+			out.Values[i] = ec._Airport_updated_at(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -8199,6 +9002,20 @@ func (ec *executionContext) _Booking(ctx context.Context, sel ast.SelectionSet, 
 				return innerFunc(ctx)
 
 			})
+		case "created_at":
+
+			out.Values[i] = ec._Booking_created_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "updated_at":
+
+			out.Values[i] = ec._Booking_updated_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8339,6 +9156,20 @@ func (ec *executionContext) _Customer(ctx context.Context, sel ast.SelectionSet,
 		case "email":
 
 			out.Values[i] = ec._Customer_email(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "created_at":
+
+			out.Values[i] = ec._Customer_created_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updated_at":
+
+			out.Values[i] = ec._Customer_updated_at(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -8510,6 +9341,20 @@ func (ec *executionContext) _Flight(ctx context.Context, sel ast.SelectionSet, o
 		case "status":
 
 			out.Values[i] = ec._Flight_status(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "created_at":
+
+			out.Values[i] = ec._Flight_created_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "updated_at":
+
+			out.Values[i] = ec._Flight_updated_at(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
@@ -9024,6 +9869,20 @@ func (ec *executionContext) _Ticket(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "created_at":
+
+			out.Values[i] = ec._Ticket_created_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updated_at":
+
+			out.Values[i] = ec._Ticket_updated_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9090,6 +9949,20 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 				return innerFunc(ctx)
 
 			})
+		case "created_at":
+
+			out.Values[i] = ec._User_created_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "updated_at":
+
+			out.Values[i] = ec._User_updated_at(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

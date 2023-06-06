@@ -6,6 +6,7 @@ import (
 	"flookybooky/ent/airport"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -17,6 +18,10 @@ type Airport struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Address holds the value of the "address" field.
@@ -63,6 +68,8 @@ func (*Airport) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case airport.FieldName, airport.FieldAddress:
 			values[i] = new(sql.NullString)
+		case airport.FieldCreatedAt, airport.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case airport.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -85,6 +92,18 @@ func (a *Airport) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				a.ID = *value
+			}
+		case airport.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				a.CreatedAt = value.Time
+			}
+		case airport.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				a.UpdatedAt = value.Time
 			}
 		case airport.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -144,6 +163,12 @@ func (a *Airport) String() string {
 	var builder strings.Builder
 	builder.WriteString("Airport(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", a.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(a.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(a.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(a.Name)
 	builder.WriteString(", ")

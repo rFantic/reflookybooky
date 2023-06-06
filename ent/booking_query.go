@@ -299,12 +299,12 @@ func (bq *BookingQuery) WithTicket(opts ...func(*TicketQuery)) *BookingQuery {
 // Example:
 //
 //	var v []struct {
-//		CustomerID uuid.UUID `json:"customer_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Booking.Query().
-//		GroupBy(booking.FieldCustomerID).
+//		GroupBy(booking.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (bq *BookingQuery) GroupBy(field string, fields ...string) *BookingGroupBy {
@@ -322,11 +322,11 @@ func (bq *BookingQuery) GroupBy(field string, fields ...string) *BookingGroupBy 
 // Example:
 //
 //	var v []struct {
-//		CustomerID uuid.UUID `json:"customer_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Booking.Query().
-//		Select(booking.FieldCustomerID).
+//		Select(booking.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (bq *BookingQuery) Select(fields ...string) *BookingSelect {
 	bq.ctx.Fields = append(bq.ctx.Fields, fields...)

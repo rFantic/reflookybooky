@@ -11,6 +11,8 @@ type Booking {
     customer: Customer!  @goField(forceResolver: true)
     status: BookingStatus!
     ticket: [Ticket]!  @goField(forceResolver: true)
+    created_at: String!
+    updated_at: String!
 }
 
 input BookingInput{

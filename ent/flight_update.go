@@ -30,6 +30,12 @@ func (fu *FlightUpdate) Where(ps ...predicate.Flight) *FlightUpdate {
 	return fu
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (fu *FlightUpdate) SetUpdatedAt(t time.Time) *FlightUpdate {
+	fu.mutation.SetUpdatedAt(t)
+	return fu
+}
+
 // SetName sets the "name" field.
 func (fu *FlightUpdate) SetName(s string) *FlightUpdate {
 	fu.mutation.SetName(s)
@@ -127,6 +133,7 @@ func (fu *FlightUpdate) ClearDestination() *FlightUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fu *FlightUpdate) Save(ctx context.Context) (int, error) {
+	fu.defaults()
 	return withHooks(ctx, fu.sqlSave, fu.mutation, fu.hooks)
 }
 
@@ -149,6 +156,14 @@ func (fu *FlightUpdate) Exec(ctx context.Context) error {
 func (fu *FlightUpdate) ExecX(ctx context.Context) {
 	if err := fu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (fu *FlightUpdate) defaults() {
+	if _, ok := fu.mutation.UpdatedAt(); !ok {
+		v := flight.UpdateDefaultUpdatedAt()
+		fu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -179,6 +194,9 @@ func (fu *FlightUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := fu.mutation.UpdatedAt(); ok {
+		_spec.SetField(flight.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := fu.mutation.Name(); ok {
 		_spec.SetField(flight.FieldName, field.TypeString, value)
@@ -280,6 +298,12 @@ type FlightUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *FlightMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (fuo *FlightUpdateOne) SetUpdatedAt(t time.Time) *FlightUpdateOne {
+	fuo.mutation.SetUpdatedAt(t)
+	return fuo
 }
 
 // SetName sets the "name" field.
@@ -392,6 +416,7 @@ func (fuo *FlightUpdateOne) Select(field string, fields ...string) *FlightUpdate
 
 // Save executes the query and returns the updated Flight entity.
 func (fuo *FlightUpdateOne) Save(ctx context.Context) (*Flight, error) {
+	fuo.defaults()
 	return withHooks(ctx, fuo.sqlSave, fuo.mutation, fuo.hooks)
 }
 
@@ -414,6 +439,14 @@ func (fuo *FlightUpdateOne) Exec(ctx context.Context) error {
 func (fuo *FlightUpdateOne) ExecX(ctx context.Context) {
 	if err := fuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (fuo *FlightUpdateOne) defaults() {
+	if _, ok := fuo.mutation.UpdatedAt(); !ok {
+		v := flight.UpdateDefaultUpdatedAt()
+		fuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -461,6 +494,9 @@ func (fuo *FlightUpdateOne) sqlSave(ctx context.Context) (_node *Flight, err err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := fuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(flight.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := fuo.mutation.Name(); ok {
 		_spec.SetField(flight.FieldName, field.TypeString, value)

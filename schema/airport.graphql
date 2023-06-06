@@ -2,6 +2,8 @@ type Airport {
     id: String!
     name: String!
     address: String!
+    created_at: String!
+    updated_at: String!
 }
 
 input AirportInput{

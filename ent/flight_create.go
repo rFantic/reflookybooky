@@ -22,6 +22,34 @@ type FlightCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (fc *FlightCreate) SetCreatedAt(t time.Time) *FlightCreate {
+	fc.mutation.SetCreatedAt(t)
+	return fc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (fc *FlightCreate) SetNillableCreatedAt(t *time.Time) *FlightCreate {
+	if t != nil {
+		fc.SetCreatedAt(*t)
+	}
+	return fc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (fc *FlightCreate) SetUpdatedAt(t time.Time) *FlightCreate {
+	fc.mutation.SetUpdatedAt(t)
+	return fc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (fc *FlightCreate) SetNillableUpdatedAt(t *time.Time) *FlightCreate {
+	if t != nil {
+		fc.SetUpdatedAt(*t)
+	}
+	return fc
+}
+
 // SetName sets the "name" field.
 func (fc *FlightCreate) SetName(s string) *FlightCreate {
 	fc.mutation.SetName(s)
@@ -67,20 +95,6 @@ func (fc *FlightCreate) SetAvailableSlots(i int) *FlightCreate {
 // SetStatus sets the "status" field.
 func (fc *FlightCreate) SetStatus(f flight.Status) *FlightCreate {
 	fc.mutation.SetStatus(f)
-	return fc
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (fc *FlightCreate) SetCreatedAt(t time.Time) *FlightCreate {
-	fc.mutation.SetCreatedAt(t)
-	return fc
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fc *FlightCreate) SetNillableCreatedAt(t *time.Time) *FlightCreate {
-	if t != nil {
-		fc.SetCreatedAt(*t)
-	}
 	return fc
 }
 
@@ -153,6 +167,10 @@ func (fc *FlightCreate) defaults() {
 		v := flight.DefaultCreatedAt()
 		fc.mutation.SetCreatedAt(v)
 	}
+	if _, ok := fc.mutation.UpdatedAt(); !ok {
+		v := flight.DefaultUpdatedAt()
+		fc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := fc.mutation.ID(); !ok {
 		v := flight.DefaultID()
 		fc.mutation.SetID(v)
@@ -161,6 +179,12 @@ func (fc *FlightCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (fc *FlightCreate) check() error {
+	if _, ok := fc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Flight.created_at"`)}
+	}
+	if _, ok := fc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Flight.updated_at"`)}
+	}
 	if _, ok := fc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Flight.name"`)}
 	}
@@ -189,9 +213,6 @@ func (fc *FlightCreate) check() error {
 		if err := flight.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Flight.status": %w`, err)}
 		}
-	}
-	if _, ok := fc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Flight.created_at"`)}
 	}
 	if _, ok := fc.mutation.OriginID(); !ok {
 		return &ValidationError{Name: "origin", err: errors.New(`ent: missing required edge "Flight.origin"`)}
@@ -234,6 +255,14 @@ func (fc *FlightCreate) createSpec() (*Flight, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
+	if value, ok := fc.mutation.CreatedAt(); ok {
+		_spec.SetField(flight.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := fc.mutation.UpdatedAt(); ok {
+		_spec.SetField(flight.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := fc.mutation.Name(); ok {
 		_spec.SetField(flight.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -257,10 +286,6 @@ func (fc *FlightCreate) createSpec() (*Flight, *sqlgraph.CreateSpec) {
 	if value, ok := fc.mutation.Status(); ok {
 		_spec.SetField(flight.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := fc.mutation.CreatedAt(); ok {
-		_spec.SetField(flight.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
 	}
 	if nodes := fc.mutation.OriginIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -19,24 +19,59 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	airportMixin := schema.Airport{}.Mixin()
+	airportMixinFields0 := airportMixin[0].Fields()
+	_ = airportMixinFields0
 	airportFields := schema.Airport{}.Fields()
 	_ = airportFields
+	// airportDescCreatedAt is the schema descriptor for created_at field.
+	airportDescCreatedAt := airportMixinFields0[0].Descriptor()
+	// airport.DefaultCreatedAt holds the default value on creation for the created_at field.
+	airport.DefaultCreatedAt = airportDescCreatedAt.Default.(func() time.Time)
+	// airportDescUpdatedAt is the schema descriptor for updated_at field.
+	airportDescUpdatedAt := airportMixinFields0[1].Descriptor()
+	// airport.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	airport.DefaultUpdatedAt = airportDescUpdatedAt.Default.(func() time.Time)
+	// airport.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	airport.UpdateDefaultUpdatedAt = airportDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// airportDescID is the schema descriptor for id field.
 	airportDescID := airportFields[0].Descriptor()
 	// airport.DefaultID holds the default value on creation for the id field.
 	airport.DefaultID = airportDescID.Default.(func() uuid.UUID)
+	bookingMixin := schema.Booking{}.Mixin()
+	bookingMixinFields0 := bookingMixin[0].Fields()
+	_ = bookingMixinFields0
 	bookingFields := schema.Booking{}.Fields()
 	_ = bookingFields
 	// bookingDescCreatedAt is the schema descriptor for created_at field.
-	bookingDescCreatedAt := bookingFields[5].Descriptor()
+	bookingDescCreatedAt := bookingMixinFields0[0].Descriptor()
 	// booking.DefaultCreatedAt holds the default value on creation for the created_at field.
 	booking.DefaultCreatedAt = bookingDescCreatedAt.Default.(func() time.Time)
+	// bookingDescUpdatedAt is the schema descriptor for updated_at field.
+	bookingDescUpdatedAt := bookingMixinFields0[1].Descriptor()
+	// booking.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	booking.DefaultUpdatedAt = bookingDescUpdatedAt.Default.(func() time.Time)
+	// booking.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	booking.UpdateDefaultUpdatedAt = bookingDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// bookingDescID is the schema descriptor for id field.
 	bookingDescID := bookingFields[0].Descriptor()
 	// booking.DefaultID holds the default value on creation for the id field.
 	booking.DefaultID = bookingDescID.Default.(func() uuid.UUID)
+	customerMixin := schema.Customer{}.Mixin()
+	customerMixinFields0 := customerMixin[0].Fields()
+	_ = customerMixinFields0
 	customerFields := schema.Customer{}.Fields()
 	_ = customerFields
+	// customerDescCreatedAt is the schema descriptor for created_at field.
+	customerDescCreatedAt := customerMixinFields0[0].Descriptor()
+	// customer.DefaultCreatedAt holds the default value on creation for the created_at field.
+	customer.DefaultCreatedAt = customerDescCreatedAt.Default.(func() time.Time)
+	// customerDescUpdatedAt is the schema descriptor for updated_at field.
+	customerDescUpdatedAt := customerMixinFields0[1].Descriptor()
+	// customer.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	customer.DefaultUpdatedAt = customerDescUpdatedAt.Default.(func() time.Time)
+	// customer.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	customer.UpdateDefaultUpdatedAt = customerDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// customerDescLicenseID is the schema descriptor for license_id field.
 	customerDescLicenseID := customerFields[3].Descriptor()
 	// customer.LicenseIDValidator is a validator for the "license_id" field. It is called by the builders before save.
@@ -59,32 +94,63 @@ func init() {
 	customerDescPhoneNumber := customerFields[4].Descriptor()
 	// customer.PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	customer.PhoneNumberValidator = customerDescPhoneNumber.Validators[0].(func(string) error)
-	// customerDescTimestamp is the schema descriptor for timestamp field.
-	customerDescTimestamp := customerFields[6].Descriptor()
-	// customer.DefaultTimestamp holds the default value on creation for the timestamp field.
-	customer.DefaultTimestamp = customerDescTimestamp.Default.(time.Time)
 	// customerDescID is the schema descriptor for id field.
 	customerDescID := customerFields[0].Descriptor()
 	// customer.DefaultID holds the default value on creation for the id field.
 	customer.DefaultID = customerDescID.Default.(func() uuid.UUID)
+	flightMixin := schema.Flight{}.Mixin()
+	flightMixinFields0 := flightMixin[0].Fields()
+	_ = flightMixinFields0
 	flightFields := schema.Flight{}.Fields()
 	_ = flightFields
 	// flightDescCreatedAt is the schema descriptor for created_at field.
-	flightDescCreatedAt := flightFields[9].Descriptor()
+	flightDescCreatedAt := flightMixinFields0[0].Descriptor()
 	// flight.DefaultCreatedAt holds the default value on creation for the created_at field.
 	flight.DefaultCreatedAt = flightDescCreatedAt.Default.(func() time.Time)
+	// flightDescUpdatedAt is the schema descriptor for updated_at field.
+	flightDescUpdatedAt := flightMixinFields0[1].Descriptor()
+	// flight.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	flight.DefaultUpdatedAt = flightDescUpdatedAt.Default.(func() time.Time)
+	// flight.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	flight.UpdateDefaultUpdatedAt = flightDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// flightDescID is the schema descriptor for id field.
 	flightDescID := flightFields[0].Descriptor()
 	// flight.DefaultID holds the default value on creation for the id field.
 	flight.DefaultID = flightDescID.Default.(func() uuid.UUID)
+	ticketMixin := schema.Ticket{}.Mixin()
+	ticketMixinFields0 := ticketMixin[0].Fields()
+	_ = ticketMixinFields0
 	ticketFields := schema.Ticket{}.Fields()
 	_ = ticketFields
+	// ticketDescCreatedAt is the schema descriptor for created_at field.
+	ticketDescCreatedAt := ticketMixinFields0[0].Descriptor()
+	// ticket.DefaultCreatedAt holds the default value on creation for the created_at field.
+	ticket.DefaultCreatedAt = ticketDescCreatedAt.Default.(func() time.Time)
+	// ticketDescUpdatedAt is the schema descriptor for updated_at field.
+	ticketDescUpdatedAt := ticketMixinFields0[1].Descriptor()
+	// ticket.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	ticket.DefaultUpdatedAt = ticketDescUpdatedAt.Default.(func() time.Time)
+	// ticket.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	ticket.UpdateDefaultUpdatedAt = ticketDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// ticketDescID is the schema descriptor for id field.
 	ticketDescID := ticketFields[0].Descriptor()
 	// ticket.DefaultID holds the default value on creation for the id field.
 	ticket.DefaultID = ticketDescID.Default.(func() uuid.UUID)
+	userMixin := schema.User{}.Mixin()
+	userMixinFields0 := userMixin[0].Fields()
+	_ = userMixinFields0
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescCreatedAt is the schema descriptor for created_at field.
+	userDescCreatedAt := userMixinFields0[0].Descriptor()
+	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
+	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
+	// userDescUpdatedAt is the schema descriptor for updated_at field.
+	userDescUpdatedAt := userMixinFields0[1].Descriptor()
+	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
+	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// userDescCustomerID is the schema descriptor for customer_id field.
 	userDescCustomerID := userFields[1].Descriptor()
 	// user.CustomerIDValidator is a validator for the "customer_id" field. It is called by the builders before save.

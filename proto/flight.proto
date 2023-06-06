@@ -9,6 +9,8 @@ message Airport {
     string id = 1;
     string name = 2;
     string address = 3;
+    string created_at = 4;
+    string updated_at = 5;
 }
 
 message Airports {
@@ -25,6 +27,8 @@ message Flight {
     google.protobuf.Timestamp departure_time = 7;
     google.protobuf.Timestamp arrival_time = 8;
     string status = 9;
+    string created_at = 10;
+    string updated_at = 11;
 }
 
 message FlightUpdateInput {

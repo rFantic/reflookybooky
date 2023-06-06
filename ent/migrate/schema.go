@@ -11,6 +11,8 @@ var (
 	// AirportsColumns holds the columns for the "airports" table.
 	AirportsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "address", Type: field.TypeString},
 	}
@@ -23,11 +25,12 @@ var (
 	// BookingsColumns holds the columns for the "bookings" table.
 	BookingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "customer_id", Type: field.TypeUUID},
 		{Name: "going_flight_id", Type: field.TypeUUID},
 		{Name: "return_flight_id", Type: field.TypeUUID, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"Cancelled", "Scheduled", "Departed"}},
-		{Name: "created_at", Type: field.TypeTime},
 	}
 	// BookingsTable holds the schema information for the "bookings" table.
 	BookingsTable = &schema.Table{
@@ -38,12 +41,13 @@ var (
 	// CustomersColumns holds the columns for the "customers" table.
 	CustomersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "address", Type: field.TypeString},
 		{Name: "license_id", Type: field.TypeString},
 		{Name: "phone_number", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
-		{Name: "timestamp", Type: field.TypeTime},
 	}
 	// CustomersTable holds the schema information for the "customers" table.
 	CustomersTable = &schema.Table{
@@ -54,13 +58,14 @@ var (
 	// FlightsColumns holds the columns for the "flights" table.
 	FlightsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "departure_time", Type: field.TypeTime},
 		{Name: "arrival_time", Type: field.TypeTime},
 		{Name: "total_slots", Type: field.TypeInt},
 		{Name: "available_slots", Type: field.TypeInt},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"Cancelled", "Departed", "Landed", "Scheduled", "Delayed"}},
-		{Name: "created_at", Type: field.TypeTime},
 		{Name: "origin_id", Type: field.TypeUUID},
 		{Name: "destinartion_id", Type: field.TypeUUID},
 	}
@@ -72,13 +77,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "flights_airports_origin",
-				Columns:    []*schema.Column{FlightsColumns[8]},
+				Columns:    []*schema.Column{FlightsColumns[9]},
 				RefColumns: []*schema.Column{AirportsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "flights_airports_destination",
-				Columns:    []*schema.Column{FlightsColumns[9]},
+				Columns:    []*schema.Column{FlightsColumns[10]},
 				RefColumns: []*schema.Column{AirportsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -87,6 +92,8 @@ var (
 	// TicketsColumns holds the columns for the "tickets" table.
 	TicketsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"Canceled", "Departed", "Scheduled"}},
 		{Name: "passenger_name", Type: field.TypeString},
 		{Name: "passenger_license_id", Type: field.TypeString},
@@ -103,7 +110,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tickets_bookings_ticket",
-				Columns:    []*schema.Column{TicketsColumns[7]},
+				Columns:    []*schema.Column{TicketsColumns[9]},
 				RefColumns: []*schema.Column{BookingsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -112,6 +119,8 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "username", Type: field.TypeString, Unique: true},
 		{Name: "password", Type: field.TypeString},

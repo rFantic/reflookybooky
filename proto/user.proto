@@ -12,6 +12,8 @@ message User {
     string email = 4;
     string role = 5;
     Customer customer = 6;
+    string created_at = 7;
+    string updated_at = 8;
 }
 
 message UserInput {

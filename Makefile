@@ -4,7 +4,7 @@ os:
 	@echo ${OSFLAG}
 
 genGql:
-	go run github.com/99designs/gqlgen
+	go get github.com/99designs/gqlgen && go run github.com/99designs/gqlgen
 
 genEnt:
 	go generate ./ent

@@ -19,6 +19,8 @@ type Ticket {
     seat_number: String!
     ticket_class: TicketClass!
     status: TicketStatus!
+    created_at: String!
+    updated_at: String!
 }
 
 input TicketInput{

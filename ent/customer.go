@@ -18,6 +18,10 @@ type Customer struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Address holds the value of the "address" field.
@@ -27,9 +31,7 @@ type Customer struct {
 	// PhoneNumber holds the value of the "phone_number" field.
 	PhoneNumber string `json:"phone_number,omitempty"`
 	// Email holds the value of the "email" field.
-	Email string `json:"email,omitempty"`
-	// Timestamp holds the value of the "timestamp" field.
-	Timestamp    time.Time `json:"timestamp,omitempty"`
+	Email        string `json:"email,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -40,7 +42,7 @@ func (*Customer) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case customer.FieldName, customer.FieldAddress, customer.FieldLicenseID, customer.FieldPhoneNumber, customer.FieldEmail:
 			values[i] = new(sql.NullString)
-		case customer.FieldTimestamp:
+		case customer.FieldCreatedAt, customer.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case customer.FieldID:
 			values[i] = new(uuid.UUID)
@@ -64,6 +66,18 @@ func (c *Customer) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				c.ID = *value
+			}
+		case customer.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				c.CreatedAt = value.Time
+			}
+		case customer.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				c.UpdatedAt = value.Time
 			}
 		case customer.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -94,12 +108,6 @@ func (c *Customer) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
 				c.Email = value.String
-			}
-		case customer.FieldTimestamp:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field timestamp", values[i])
-			} else if value.Valid {
-				c.Timestamp = value.Time
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -137,6 +145,12 @@ func (c *Customer) String() string {
 	var builder strings.Builder
 	builder.WriteString("Customer(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(c.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(c.Name)
 	builder.WriteString(", ")
@@ -151,9 +165,6 @@ func (c *Customer) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(c.Email)
-	builder.WriteString(", ")
-	builder.WriteString("timestamp=")
-	builder.WriteString(c.Timestamp.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

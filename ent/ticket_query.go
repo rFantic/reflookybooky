@@ -298,12 +298,12 @@ func (tq *TicketQuery) WithBooking(opts ...func(*BookingQuery)) *TicketQuery {
 // Example:
 //
 //	var v []struct {
-//		BookingID uuid.UUID `json:"booking_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Ticket.Query().
-//		GroupBy(ticket.FieldBookingID).
+//		GroupBy(ticket.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (tq *TicketQuery) GroupBy(field string, fields ...string) *TicketGroupBy {
@@ -321,11 +321,11 @@ func (tq *TicketQuery) GroupBy(field string, fields ...string) *TicketGroupBy {
 // Example:
 //
 //	var v []struct {
-//		BookingID uuid.UUID `json:"booking_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Ticket.Query().
-//		Select(ticket.FieldBookingID).
+//		Select(ticket.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (tq *TicketQuery) Select(fields ...string) *TicketSelect {
 	tq.ctx.Fields = append(tq.ctx.Fields, fields...)
