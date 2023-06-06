@@ -1,0 +1,89 @@
+# - admin can create, update and cancel flight.
+# - user can get flight list using flight query
+# flight query support pagination (refer users.query for usage)
+# - flight can be search by origin airport and destination airport 
+# as well as needed booking slots and departure time and status
+
+mutation createFlight {
+  flight {
+    createFlight (input: {
+      name: "VN 157 Airbus A321"
+      originId: "ee0a3b9e-dd5c-4c26-bd61-dfd506fe30f0"
+      destinationId: "46be7300-dd77-4116-ab03-2bf3e5085bb9"
+      total_slots: 20
+      departure_time: "2023-05-20T10:00:00PM"
+      arrival_time: "2023-05-21T05:00:00PM"
+      status: Scheduled
+    }){
+      id
+      name
+      origin{
+        id
+        name
+      }
+      destination{
+        id
+        name
+      }
+      available_slots
+      departure_time
+      arrival_time
+    }
+  }
+}
+
+query getFlights {
+	flight {
+    id
+    name
+    arrival_time
+    departure_time
+    origin{
+      name
+      address
+    }
+    destination{
+      name
+      address
+    }
+    total_slots
+    status
+  }
+}
+
+mutation updateFlight {
+  flight {
+    updateFlight(input:{
+      id: "0e406bb7-6ae8-476d-bb85-cf74a1eaf1e8"
+      total_slots: 5
+      status: Scheduled
+    })
+  }
+}
+
+mutation cancelFlight {
+  flight {
+    cancelFlight (input: {
+      id: "50df8d21-6119-4c0d-af63-711388215095"
+    })
+  }
+}
+
+query searchFlight {
+	searchFlight (input: {
+    available_slots_at_least: 5
+    destination_id: "46be7300-dd77-4116-ab03-2bf3e5085bb9"
+  }) {
+    id
+    name
+    origin {
+      address
+    }
+    destination {
+      address
+    }
+    total_slots
+    available_slots
+  }
+}
+  

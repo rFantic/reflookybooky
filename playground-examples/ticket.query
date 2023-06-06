@@ -1,0 +1,16 @@
+# - user and admin can view ticket list
+
+query getTicket {
+  ticket {
+    id
+    status
+    passenger_license_id
+    passenger_name
+    passenger_email
+    seat_number
+    ticket_class
+  }
+}
+
+# find ticket (user)
+# ticket list (user)

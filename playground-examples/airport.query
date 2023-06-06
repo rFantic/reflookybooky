@@ -1,0 +1,46 @@
+# - admin can define new airport with createAirport()
+# - user can view airports list using airport query
+# airport query support pagination (refer to users.query for usage)
+
+query getAirports {
+  airport (input: {
+    desFields: ["address"]
+  }) {
+    id
+    name
+    address
+  }
+}
+
+mutation createAirport {
+  airport {
+    createAirport(
+      input: {
+        name: "Noi Bai International Airport (HAN)",
+        address: "Phú Minh, Sóc Sơn, Hanoi",
+      }
+    ) {
+      id
+      name
+      address
+    }
+  }   
+}
+
+mutation createAirport2 {
+  airport {
+    createAirport(
+      input: {
+        name: "Cam Ranh International Airport (CXR)",
+        address: "Cam Ranh, Khánh Hòa, Nha Trang",
+      }
+    ) {
+      id
+      name
+      address
+    }
+  }
+}
+
+# update_airport
+# find_airport

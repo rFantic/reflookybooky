@@ -1,0 +1,101 @@
+# - register() are used to create a new user and can be login
+# customer infomation is optional and will be used when booking
+# - user login through login() and logout with logout()
+# - user with role admin can query user list using users()
+# pagination is supported, field orders can be passed through ascFields and desFields
+# offset and limit is supported as well
+# - registered user can change their password with updatePassword
+# - admin can update user role with updateUser
+
+mutation register_without_info {
+  user{
+    register(input: {
+    username: "Miloo", 
+    password: "passwd", 
+    email: "miloo@gmail.com"
+    role: "admin"}) {
+      username
+      role
+      email
+      customer {
+        name
+      }
+    }
+  }
+}
+
+mutation register_with_info {
+	user {
+    register(
+      input: {
+        username: "Lilooo", 
+        password: "passwd", 
+        email: "lilooo@gmail.com"
+        role: "user", 
+        customer: {
+          name: "Nguyen Huu Nghia", 
+          address: "485 Hoa Bằng, Tân Sơn Nhì, Tân Phú, Thành phố Hồ Chí Minh, Việt Nam",
+          email: "lilooo@gmail.com"
+          license_id: "034098002348", 
+          phone_number: "0856489465"}}
+    ) {
+      username
+      email
+      role
+      customer {
+        name
+      }
+    }
+  }
+}
+
+query login {
+  #login(input: {username: "Lilooo", password: "passwd"}) {
+  login(input: {username: "Miloo", password: "passwd"}) {
+    tokenString
+  }
+}
+
+query logout {
+	logout
+}
+
+
+query get_users {
+  users (input: {
+    ascFields: ["username", "email"]
+    limit: 10
+    offset: 0
+  }) {
+    id
+    username
+    email
+    customer {
+      name
+      license_id
+    }
+  }
+}
+
+mutation updateUser {
+	user {
+    updateUser(input: {
+      id: "7db37c97-3317-4383-ac42-74c19a72c5f8",
+      email: "liban@gmail.com"
+      role: "user"
+    })
+  }
+}
+
+mutation updatePassword {
+  user {
+    updatePassword(input: {
+      id: "7db37c97-3317-4383-ac42-74c19a72c5f8",
+      previous_password: "passwd"
+      new_password: "newpasswd",
+    })
+  }
+}
+
+# find_user (admin)
+# show_profile (user)
