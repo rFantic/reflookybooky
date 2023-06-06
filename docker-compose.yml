@@ -6,76 +6,84 @@ services:
     ports:
       - 9999:8080
 
-  userdb:
-    profiles: ["user", "graphql"]
+  db:
     image: postgres
     restart: always
     environment:
-      POSTGRES_DB: user
+      POSTGRES_DB: flookybooky
       POSTGRES_USER: root
       POSTGRES_PASSWORD: passwd
+
+  # userdb:
+  #   profiles: ["user", "graphql"]
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: user
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: passwd
 
   user:
     profiles: ["user", "graphql"]
     depends_on:
-      - userdb
+      - db
     build:
       context: .
       dockerfile: ./grpc/user-grpc/user.dockerfile
     restart: on-failure
     command: ["app"]
 
-  flightdb:
-    profiles: ["flight", "graphql"]
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: flight
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: passwd
+  # flightdb:
+  #   profiles: ["flight", "graphql"]
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: flight
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: passwd
 
   flight:
     profiles: ["flight", "graphql"]
     depends_on:
-      - flightdb
+      - db
     build:
       context: .
       dockerfile: ./grpc/flight-grpc/flight.dockerfile
     restart: on-failure
     command: ["app"]
 
-  customerdb:
-    profiles: ["customer", "graphql"]
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: customer
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: passwd
+  # customerdb:
+  #   profiles: ["customer", "graphql"]
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: customer
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: passwd
 
   customer:
     profiles: ["customer", "graphql"]
     depends_on:
-      - customerdb
+      - db
     build:
       context: .
       dockerfile: ./grpc/customer-grpc/customer.dockerfile
     restart: on-failure
     command: ["app"]
 
-  bookingdb:
-    profiles: ["booking", "graphql"]
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: booking
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: passwd
+  # bookingdb:
+  #   profiles: ["booking", "graphql"]
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: booking
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: passwd
 
   booking:
     profiles: ["booking", "graphql"]
     depends_on:
-      - bookingdb
+      - db
     build:
       context: .
       dockerfile: ./grpc/booking-grpc/booking.dockerfile
